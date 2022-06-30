@@ -15,10 +15,6 @@ Player::Player() {
 	angle = 0.0;
 	count = 0;
 	speed = 5;
-	hp = 1000;
-	fuel = 20000;
-	bari = 3;
-	bariup = 10;
 }
 
 void Player::Init(){
@@ -30,10 +26,6 @@ void Player::Init(){
 	angle = 0.0;
 	count = 0;
 	speed = 5;
-	hp = 1000;
-	fuel = 20000;
-	bari = 3;
-	bariup = 10;
 }
 
 void Player::PlayerControl() {
