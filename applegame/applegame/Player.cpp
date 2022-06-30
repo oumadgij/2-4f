@@ -39,10 +39,6 @@ void Player::PlayerControl() {
 
 	if (x > SCREEN_WIDTH - 180)x = SCREEN_WIDTH - 180;
 
-	if (y < 60)y = 60;
-
-	if (y > SCREEN_HEIGHT - 60)y = SCREEN_HEIGHT - 60;
-
 	//プレイヤーの表示
 	DrawRotaGraph(x, y, 1.0f, 0, g_Car, TRUE, FALSE);
 }
