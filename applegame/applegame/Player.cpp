@@ -17,7 +17,7 @@ Player::Player() {
 	speed = 5;
 }
 
-void Player::Init(){
+void Player::Init() {
 	flg = TRUE;
 	x = SCREEN_WIDTH / 2;
 	y = SCREEN_HEIGHT - 100;
@@ -29,9 +29,8 @@ void Player::Init(){
 }
 
 void Player::PlayerControl() {
-	//è„â∫ç∂âEà⁄ìÆ
-		if (g_NowKey & PAD_INPUT_UP)y -= speed;
-		if (g_NowKey & PAD_INPUT_DOWN)y += speed;
+	//ç∂âEà⁄ìÆ
+
 		if (g_NowKey & PAD_INPUT_LEFT)x -= speed;
 		if (g_NowKey & PAD_INPUT_RIGHT)x += speed;
 
