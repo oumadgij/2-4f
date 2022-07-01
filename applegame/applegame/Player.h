@@ -3,7 +3,7 @@ class Player {
 private:
 	int x, y;		//座標x y
 	int w, h;		//幅w 高さh
-	double angle;	//機体の向き
+	int angle;	//機体の向き
 	int count;		//タイミング用
 	int speed;		//移動速度
 

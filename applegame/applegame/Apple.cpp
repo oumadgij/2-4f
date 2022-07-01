@@ -30,6 +30,11 @@ void Apple::Spawn(int x) {
 	point = 0;	//スコア加算
 }
 
+//int Apple::SelectApple(void) {
+//	
+//
+//}
+
 void Apple::EnemyControl() {
 		if (flg == TRUE) {
 			//敵の表示
