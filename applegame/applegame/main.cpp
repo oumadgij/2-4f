@@ -27,7 +27,7 @@ int g_Item[2];			//アイテム画像変数
 int g_EndImage;			//エンド画面用変数
 int g_Teki[4];			//敵画像変数
 int g_StageImage;		//ステージ画像変数
-int g_Car, g_Barrier;	//キャラ画像
+int g_PlayerImage[2];	//キャラ画像
 
 //自機初期値
 
@@ -471,7 +471,8 @@ int LoadImages() {
 	if ((g_StageImage = LoadGraph("images/back.png")) == -1)return -1;
 
 	//プレイヤー
-	if ((g_Car = LoadGraph("images/car1pol.bmp")) == -1)return -1;
+	if ((g_PlayerImage[0] = LoadGraph("images/player1.png")) == -1)return -1;
+	if ((g_PlayerImage[1] = LoadGraph("images/player2.png")) == -1)return -1;
 
 	//敵
 	if (LoadDivGraph("images/apple.png", 4, 4, 1, 40, 40, g_Teki) == -1)return -1;
