@@ -12,6 +12,7 @@ public:
 	Player();
 	void Init();
 	void PlayerControl();	//©‹@ˆ—
+	int AppleColision(int i);
 };
 
 extern Player player;
