@@ -48,3 +48,19 @@ void Apple::EnemyControl() {
 		}
 	
 }
+
+int Apple::GetX() {
+	return x;
+}
+
+int Apple::GetY() {
+	return y;
+}
+
+int Apple::GetWidth() {
+	return w;
+}
+
+int Apple::GetHeight() {
+	return h;
+}
