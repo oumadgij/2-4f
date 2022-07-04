@@ -29,6 +29,8 @@ int g_Teki[4];			//敵画像変数
 int g_StageImage;		//ステージ画像変数
 int g_PlayerImage[2];	//キャラ画像
 
+int StartKeyFlg;
+
 //自機初期値
 
 //ランキングデータ(構造体)
@@ -64,6 +66,8 @@ int  SaveRanking(void);		//ランキングデータの保存
 int  ReadRanking(void);		//ランキングデータ読み込み
 
 int LoadImages();			//画像読み込み
+
+int CheckPauseKey(void);	//ポーズ　startKeyのチェック
 
 //プログラムの開始
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
@@ -249,6 +253,8 @@ void GameMain(void) {
 
 	BackScrool();
 
+
+	
 	for (int i = 0; i < APPLE_MAX; i++) {
 		apple[i].EnemyControl();	//リンゴ制御
 		player.AppleColision(i);
@@ -485,3 +491,12 @@ int LoadImages() {
 	return 0;
 }
 
+int CheckPauseKey(void) {
+	if (PAD_INPUT_START)
+	{
+		//DrawBox(0, 0, 100, 100, GetColor(255, 0, 0), 1);
+		return 1;
+	}
+	
+	return 0;
+}
