@@ -7,27 +7,27 @@ extern int g_Teki[3];
 Apple apple[APPLE_MAX];
 
 Apple::Apple() {
-	flg = FALSE;	//Žg—pƒtƒ‰ƒO
-	type = 0;	//ƒ^ƒCƒv
-	img = 0;	//‰æ‘œ
-	x = 0;	//À•Wxy •w ‚‚³h
+	flg = FALSE;	//ä½¿ç”¨ãƒ•ãƒ©ã‚°
+	type = 0;	//ã‚¿ã‚¤ãƒ—
+	img = 0;	//ç”»åƒ
+	x = 0;	//åº§æ¨™xy å¹…w é«˜ã•h
 	y = -50;
 	w = 40;
 	h = 40;
-	speed = 0;	//‘¬“x
-	point = 0;	//ƒXƒRƒA‰ÁŽZ
+	speed = 0;	//é€Ÿåº¦
+	point = 0;	//ã‚¹ã‚³ã‚¢åŠ ç®—
 }
 
 void Apple::Spawn(int x) {
-	flg = TRUE;	//Žg—pƒtƒ‰ƒO
-	type = GetRand(3);	//ƒ^ƒCƒv
-	img = g_Teki[type];	//‰æ‘œ
-	this->x = x * 62 + 62;	//À•Wxy •w ‚‚³h
+	flg = TRUE;	//ä½¿ç”¨ãƒ•ãƒ©ã‚°
+	type = GetRand(3);	//ã‚¿ã‚¤ãƒ—
+	img = g_Teki[type];	//ç”»åƒ
+	this->x = x * 62 + 62;	//åº§æ¨™xy å¹…w é«˜ã•h
 	y = -50;
 	w = 40;
 	h = 40;
-	speed = type + 1;	//‘¬“x
-	point = 0;	//ƒXƒRƒA‰ÁŽZ
+	speed = type + 1;	//é€Ÿåº¦
+	point = 0;	//ã‚¹ã‚³ã‚¢åŠ ç®—
 }
 
 //int Apple::SelectApple(void) {
@@ -37,13 +37,13 @@ void Apple::Spawn(int x) {
 
 void Apple::EnemyControl() {
 		if (flg == TRUE) {
-			//“G‚Ì•\Ž¦
+			//æ•µã®è¡¨ç¤º
 			DrawGraph(x, y, img, TRUE);
 
-			//^‰º‚ÉˆÚ“®
+			//çœŸä¸‹ã«ç§»å‹•
 			y += speed;
 
-			//‰æ–Ê‚ðo‚é‚ÆÁ–Å
+			//ç”»é¢ã‚’å‡ºã‚‹ã¨æ¶ˆæ»…
 			if (y > SCREEN_HEIGHT + h)flg = FALSE;
 		}
 	
@@ -52,15 +52,12 @@ void Apple::EnemyControl() {
 int Apple::GetX() {
 	return x;
 }
-
 int Apple::GetY() {
 	return y;
 }
-
 int Apple::GetWidth() {
 	return w;
 }
-
 int Apple::GetHeight() {
 	return h;
 }
