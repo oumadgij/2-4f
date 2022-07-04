@@ -251,6 +251,7 @@ void GameMain(void) {
 
 	for (int i = 0; i < APPLE_MAX; i++) {
 		apple[i].EnemyControl();	//リンゴ制御
+		player.AppleColision(i);
 	}
 	if (g_WaitTime++ % 25 == 0&& g_WaitTime % 25 != 0) {	//25fごとにリンゴ出現
 		for (int i = 0; i < restapple / 2; i++) {		//リンゴの生成数チェック(生成可能数/2)
@@ -268,6 +269,7 @@ void GameMain(void) {
 	}
 
 	player.PlayerControl();	//プレイヤー制御
+
 
 }
 

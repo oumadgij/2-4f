@@ -2,6 +2,7 @@
 #include"Dxlib.h"
 #include"common.h"
 #include"Math.h"
+#include"Apple.h"
 extern int g_PlayerImage[2];
 typedef enum Angle {
 	LEFT,
@@ -75,4 +76,25 @@ void Player::PlayerControl() {
 			break;
 		}
 	}
+}
+
+int Player::AppleColision(int i) {
+		if (apple[i].flg == TRUE) {	//そのリンゴは出現中？
+			int px1 = x;		//プレイヤーX座標始点
+			int py1 = y;		//プレイヤーY座標始点
+			int px2 = px1 + w;	//プレイヤーX座標終点
+			int py2 = py1 + h;	//プレイヤーY座標終点
+
+			int ax1 = apple[i].GetX();	//りんごX始点
+			int ay1 = apple[i].GetY();	//りんごY始点
+			int ax2 = ax1 + apple[i].GetWidth();			//りんごX終
+			int ay2 = ay1 + apple[i].GetHeight();			//りんごY終点
+
+			//矩形が重なれば当たり
+			if (px1 < ax2 && px2 > ax1 && py1 < ay2 && py2 > ay1) {
+				apple[i].flg = FALSE;
+				return apple[i].GetType();
+			}
+		}
+		return 4;
 }

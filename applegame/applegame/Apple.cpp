@@ -49,6 +49,9 @@ void Apple::EnemyControl() {
 	
 }
 
+int Apple::GetType() {
+	return type;
+}
 int Apple::GetX() {
 	return x;
 }
