@@ -20,20 +20,37 @@ Apple::Apple() {
 
 void Apple::Spawn(int x) {
 	flg = TRUE;	//使用フラグ
-	type = GetRand(3);	//タイプ
+	SelectApple();
 	img = g_Teki[type];	//画像
 	this->x = x * 62 + 62;	//座標xy 幅w 高さh
 	y = -50;
 	w = 40;
 	h = 40;
-	speed = type + 1;	//速度
-	point = 0;	//スコア加算
 }
 
-//int Apple::SelectApple(void) {
-//	
-//
-//}
+void Apple::SelectApple(void) {
+	int select = GetRand(99) + 1;
+	if (select <= 60) {
+		type = 0;
+		speed = 2;
+		point = 150;
+	}
+	else if (select <= 80) {
+		type = 1;
+		speed = 5;
+		point = 300;
+	}
+	else if (select <= 90) {
+		type = 2;
+		speed = 10;
+		point = 500;
+	}
+	else{
+		type = 3;
+		speed = 1;
+		point = -1000;
+	}
+}
 
 void Apple::EnemyControl() {
 		if (flg == TRUE) {
