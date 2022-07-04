@@ -253,7 +253,7 @@ void GameMain(void) {
 		apple[i].EnemyControl();	//リンゴ制御
 	}
 	if (g_WaitTime++ % 25 == 0&& g_WaitTime % 25 != 0) {	//25fごとにリンゴ出現
-		for (int i = 0; i < restapple / 2; i++) {		//リンゴの生成数チェック(生成可能数/2)
+		for (int i = 0; i < (restapple + 1) / 2; i++) {		//リンゴの生成数チェック(生成可能数/2)
 			for (int j = i; j < APPLE_MAX; j++) {			
 				if (apple[j].flg == FALSE) {			//apple[j]のりんごが出現中か(フラグがTRUEか)
 					apple[j].Spawn(SpawnAppleX());		//非出現(フラグがFALSE)ならX座標を決定しリンゴを出現させる
