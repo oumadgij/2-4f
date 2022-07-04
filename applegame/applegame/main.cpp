@@ -471,8 +471,8 @@ int LoadImages() {
 	if ((g_StageImage = LoadGraph("images/back.png")) == -1)return -1;
 
 	//ƒvƒŒƒCƒ„[
-	if ((g_PlayerImage[0] = LoadGraph("images/player1.png")) == -1)return -1;
-	if ((g_PlayerImage[1] = LoadGraph("images/player2.png")) == -1)return -1;
+	if ((g_PlayerImage[0] = LoadGraph("images/player0.png")) == -1)return -1;
+	if ((g_PlayerImage[1] = LoadGraph("images/player1.png")) == -1)return -1;
 
 	//“G
 	if (LoadDivGraph("images/apple.png", 4, 4, 1, 40, 40, g_Teki) == -1)return -1;
