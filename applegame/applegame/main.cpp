@@ -258,7 +258,9 @@ void GameMain(void) {
 
 	for (int i = 0; i < APPLE_MAX; i++) {
 		apple[i].EnemyControl();	//リンゴ制御
-		player.AppleColision(i);
+		if (player.GetD() <= 0) {		//りんごDの効果中ではない？
+			player.AppleColision(i);	//効果中でないならりんごの当たり判定を取る
+		}
 	}
 	if (g_WaitTime++ % 25 == 0&& g_WaitTime % 25 != 0) {	//25fごとにリンゴ出現
 		for (int i = 0; i < (restapple + 1) / 2; i++) {		//リンゴの生成数チェック(生成可能数/2)
