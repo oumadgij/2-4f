@@ -29,6 +29,8 @@ int g_Teki[4];			//敵画像変数
 int g_StageImage;		//ステージ画像変数
 int g_PlayerImage[2];	//キャラ画像
 
+double NextTime;		//フレーム毎の経過時間
+
 //自機初期値
 
 //ランキングデータ(構造体)
@@ -121,6 +123,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		case 7:
 			InputRanking();		//ランキング入力
 			break;
+		}
+
+		NextTime += 16.66;								//1フレームごとに 1000/60 = 約16.66ミリ秒かかる			
+		if (NextTime > GetNowCount()) {					//経過フレーム*16.66秒経過した？
+			WaitTimer((int)NextTime - GetNowCount());	//してないなら経過するまで待つ
 		}
 		ScreenFlip();			//裏画面の内容を表画面に反映
 	}
