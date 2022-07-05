@@ -492,8 +492,7 @@ int LoadImages() {
 }
 
 void CheckPauseKey(void) {
-
-	if (g_KeyFlg & PAD_INPUT_START)		//指定キーでflgを1
+	if (g_KeyFlg & PAD_INPUT_8)		//指定キーでflgを1
 	{
 		int flg = 1;
 
@@ -506,7 +505,9 @@ void CheckPauseKey(void) {
 
 			SetFontSize(46);
 			DrawString(180, 200, "Xx-POSE-xX", GetColor(0, 0, 0), 1);
-			if (g_KeyFlg & PAD_INPUT_START)flg = 0;		//指定キーでFlgを0
+
+
+			if (g_KeyFlg & PAD_INPUT_8)flg = 0;		//指定キーでFlgを0
 
 			ScreenFlip();			//裏画面の内容を表画面に反映
 
