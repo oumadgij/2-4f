@@ -11,6 +11,7 @@ int g_KeyFlg;			//入力キー情報
 
 int g_GameState = 0;	//ゲームモード
 int g_WaitTime;		//待ち時間
+int g_StartTime;		//スタート時間
 
 int g_Score;			//スコア
 int g_EnemyCount1;		//敵カウント
@@ -28,6 +29,8 @@ int g_EndImage;			//エンド画面用変数
 int g_Teki[4];			//敵画像変数
 int g_StageImage;		//ステージ画像変数
 int g_PlayerImage[2];	//キャラ画像
+
+int FontHandle;
 
 double NextTime;		//フレーム毎の経過時間
 
@@ -83,6 +86,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	if (ReadRanking() == -1)return -1;
 
+	FontHandle = CreateFontToHandle("めもわーる", 55, 3, DX_FONTTYPE_NORMAL);
+
 	while (ProcessMessage() == 0 && g_GameState != 99 && !(g_KeyFlg & PAD_INPUT_START)) {
 	
 		g_OldKey = g_NowKey;
@@ -131,6 +136,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		}
 		ScreenFlip();			//裏画面の内容を表画面に反映
 	}
+	DeleteFontToHandle(FontHandle);
+
 	DxLib_End();				//DXライブラリ仕様の終了処理
 
 	return 0;					//ソフトの終了
@@ -187,6 +194,9 @@ void GameInit(void) {
 		apple[i].flg = FALSE;
 	}
 
+	//現在経過時間を得る
+	g_StartTime = GetNowCount();
+
 	//ゲームメイン処理へ
 	g_GameState = 5;
 }
@@ -195,7 +205,7 @@ void GameInit(void) {
 void DrawRanking(void) {
 
 	//スペースキーでメニューに戻る
-	if (g_KeyFlg & PAD_INPUT_M)g_GameState = 0;
+	if (g_KeyFlg & PAD_INPUT_B)g_GameState = 0;
 
 	//ランキング画面表示
 	DrawGraph(0, 0, g_RankingImage, FALSE);
@@ -214,7 +224,7 @@ void DrawRanking(void) {
 void DrawHelp(void) {
 
 	//スペースキーでメニューに戻る
-	if (g_KeyFlg & PAD_INPUT_M)g_GameState = 0;
+	if (g_KeyFlg & PAD_INPUT_B)g_GameState = 0;
 
 	//タイトル画像表示
 	DrawGraph(0, 0, g_TitleImage, FALSE);
@@ -348,7 +358,7 @@ void DrawGameOver(void) {
 	BackScrool();
 
 	//スペースキーでメニューに戻る
-	if (g_KeyFlg & PAD_INPUT_M) {
+	if (g_KeyFlg & PAD_INPUT_B) {
 		if (g_Ranking[RANKING_DATA-1].score >= g_Score) {
 			g_GameState = 0;
 		}
