@@ -29,18 +29,18 @@ void Apple::Spawn(int x) {
 }
 
 void Apple::SelectApple(void) {
-	int select = GetRand(99) + 1;
-	if (select <= 60) {
+	int select = GetRand(9) + 1;
+	if (select <= 6) {
 		type = 0;
 		speed = 2;
 		point = 150;
 	}
-	else if (select <= 80) {
+	else if (select <= 8) {
 		type = 1;
 		speed = 5;
 		point = 300;
 	}
-	else if (select <= 90) {
+	else if (select <= 9) {
 		type = 2;
 		speed = 10;
 		point = 500;
