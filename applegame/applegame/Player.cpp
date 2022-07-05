@@ -3,6 +3,9 @@
 #include"common.h"
 #include"Math.h"
 #include"Apple.h"
+
+#define PLAYER_MAX_SPEED 4
+
 extern int g_PlayerImage[2];
 typedef enum Angle {
 	LEFT,
@@ -19,7 +22,8 @@ Player::Player() {
 	y = SCREEN_HEIGHT - h;
 	angle = 0.0;
 	RestD = 0;
-	speed = 5;
+	speed = 0.0f;
+	kansei = 0.1f;
 }
 
 void Player::Init() {
@@ -30,14 +34,37 @@ void Player::Init() {
 	y = SCREEN_HEIGHT - h;
 	angle = LEFT;
 	RestD = 0;
-	speed = 5;
+	speed = 0.0f;
+	kansei = 0.1f;
 }
 
 void Player::PlayerControl() {
 
 	//左右移動
-	if (g_NowKey & PAD_INPUT_LEFT)x -= speed;
-	if (g_NowKey & PAD_INPUT_RIGHT)x += speed;
+	if (g_NowKey & PAD_INPUT_LEFT) speed -= kansei;
+	if (g_NowKey & PAD_INPUT_RIGHT) speed += kansei;
+	//スピードの制限
+	if (speed > PLAYER_MAX_SPEED) speed = PLAYER_MAX_SPEED;
+	if (speed < -PLAYER_MAX_SPEED) speed = -PLAYER_MAX_SPEED;
+	//入力を止めた時の処理
+	if ((g_NowKey & PAD_INPUT_LEFT) == 0 && (g_NowKey & PAD_INPUT_RIGHT) == 0)
+	{
+		if (speed < -0.09f)
+		{
+			speed += 0.09f;
+		}
+		else if (speed > 0.09f)
+		{
+			speed -= 0.09f;
+		}
+		else
+		{
+			speed = 0.0f;
+		}
+	}
+
+	x += speed;
+
 
 	//画像幅と高さの更新
 	if (g_NowKey & PAD_INPUT_LEFT || g_NowKey & PAD_INPUT_RIGHT) {

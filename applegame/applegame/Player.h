@@ -1,11 +1,13 @@
 #pragma once
 class Player {
 private:
-	int x, y;		//座標x y
+	int y;			//座標y
+	float x;		//座標x
 	int w, h;		//幅w 高さh
 	int angle;	//機体の向き
 	int RestD;		//りんごDの処理用
-	int speed;		//移動速度
+	float speed;    //移動速度
+	float kansei;	//慣性	
 
 public:
 	int flg;		//使用フラグ
