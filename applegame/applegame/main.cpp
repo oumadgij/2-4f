@@ -67,7 +67,7 @@ int  ReadRanking(void);		//ランキングデータ読み込み
 
 int LoadImages();			//画像読み込み
 
-int CheckPauseKey(void);	//ポーズ　startKeyのチェック
+void CheckPauseKey(void);	//ポーズ　startKeyのチェック
 
 //プログラムの開始
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
@@ -85,7 +85,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	if (ReadRanking() == -1)return -1;
 
-	while (ProcessMessage() == 0 && g_GameState != 99 && !(g_KeyFlg & PAD_INPUT_START)) {
+	while (ProcessMessage() == 0 && g_GameState != 99 && !(g_KeyFlg & PAD_INPUT_M)) {
 	
 		g_OldKey = g_NowKey;
 		g_NowKey = GetJoypadInputState(DX_INPUT_KEY_PAD1);
@@ -253,7 +253,6 @@ void GameMain(void) {
 
 	BackScrool();
 
-
 	
 	for (int i = 0; i < APPLE_MAX; i++) {
 		apple[i].EnemyControl();	//リンゴ制御
@@ -275,6 +274,7 @@ void GameMain(void) {
 	}
 
 	player.PlayerControl();	//プレイヤー制御
+	CheckPauseKey();	//ポーズ
 
 
 }
@@ -491,12 +491,25 @@ int LoadImages() {
 	return 0;
 }
 
-int CheckPauseKey(void) {
-	if (PAD_INPUT_START)
+void CheckPauseKey(void) {
+
+	if (g_KeyFlg & PAD_INPUT_START)		//指定キーでflgを1
 	{
-		//DrawBox(0, 0, 100, 100, GetColor(255, 0, 0), 1);
-		return 1;
+		int flg = 1;
+
+		while (ProcessMessage() == 0 && flg)
+		{
+			g_OldKey = g_NowKey;
+			g_NowKey = GetJoypadInputState(DX_INPUT_KEY_PAD1);
+			g_KeyFlg = g_NowKey & ~g_OldKey;
+
+
+			SetFontSize(46);
+			DrawString(180, 200, "Xx-POSE-xX", GetColor(0, 0, 0), 1);
+			if (g_KeyFlg & PAD_INPUT_START)flg = 0;		//指定キーでFlgを0
+
+			ScreenFlip();			//裏画面の内容を表画面に反映
+
+		}
 	}
-	
-	return 0;
 }
