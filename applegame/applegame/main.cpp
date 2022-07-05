@@ -1,4 +1,4 @@
-#include"DxLib.h"
+﻿#include"DxLib.h"
 #include"common.h"
 #include"Player.h"
 #include"Apple.h"
@@ -326,26 +326,6 @@ void BackScrool() {
 	DrawBox(500, 0, 640, 480, 0x009900, TRUE);
 }
 
-//敵との当たり判定
-//int HitBoxPlayer(player *p, apple *e) {
-//	//x,yは中心座標
-//	int sx1 = p->x - (p->w / 2) + 5;
-//	int sy1 = p->y - (p->h / 2) + 5;
-//	int sx2 = sx1 + p->w - 10;
-//	int sy2 = sy1 + p->h - 10;
-//
-//	int dx1 = e->x - (e->w / 2) + 5;
-//	int dy1 = e->y - (e->h / 2) + 5;
-//	int dx2 = dx1 + e->w - 10;
-//	int dy2 = dy1 + e->h - 10;
-//
-//	//矩形が重なれば当たり
-//	if (sx1 < dx2 && dx1 < sx2 && sy1 < dy2 && dy1 < sy2) {
-//		return TRUE;
-//	}
-//	return FALSE;
-//}
-// 
 //ゲームオーバー画面描画
 
 void DrawGameOver(void) {
@@ -512,7 +492,7 @@ void CheckPauseKey(void) {
 
 
 			SetFontSize(46);
-			DrawString(180, 200, "Xx-POSE-xX", GetColor(0, 0, 0), 1);
+			DrawString(180, 200, "Xx-PAUSE-xX", GetColor(0, 0, 0), 1);
 
 
 			if (g_KeyFlg & PAD_INPUT_8)flg = 0;		//指定キーでFlgを0
