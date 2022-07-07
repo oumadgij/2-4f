@@ -70,6 +70,7 @@ int  ReadRanking(void);		//ランキングデータ読み込み
 
 int LoadImages();			//画像読み込み
 
+void CheckPauseKey();	//ポーズ画面
 //プログラムの開始
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	LPSTR lpCmdLine, int nCmdShow) {
@@ -288,6 +289,7 @@ void GameMain(void) {
 	}
 
 	player.PlayerControl();	//プレイヤー制御
+	CheckPauseKey();	//ポーズ画面
 
 
 }
@@ -504,3 +506,27 @@ int LoadImages() {
 	return 0;
 }
 
+//ポーズ画面
+void CheckPauseKey(void) {
+	if (g_KeyFlg & PAD_INPUT_8)		//指定キーでflgを1
+	{
+		int flg = 1;
+
+		while (ProcessMessage() == 0 && flg)
+		{
+			g_OldKey = g_NowKey;
+			g_NowKey = GetJoypadInputState(DX_INPUT_KEY_PAD1);
+			g_KeyFlg = g_NowKey & ~g_OldKey;
+
+
+			SetFontSize(46);
+			DrawString(180, 200, "Xx-PAUSE-xX", GetColor(0, 0, 0), 1);
+
+
+			if (g_KeyFlg & PAD_INPUT_8)flg = 0;		//指定キーでFlgを0
+
+			ScreenFlip();			//裏画面の内容を表画面に反映
+
+		}
+	}
+}
