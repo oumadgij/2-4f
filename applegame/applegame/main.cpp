@@ -84,7 +84,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	if (ReadRanking() == -1)return -1;
 
-	FontHandle = CreateFontToHandle("めもわーる", 55, 3, DX_FONTTYPE_NORMAL);
+	FontHandle = CreateFontToHandle(NULL, 55, 3, DX_FONTTYPE_NORMAL);
 
 	while (ProcessMessage() == 0 && g_GameState != 99 && !(g_KeyFlg & PAD_INPUT_START)) {
 	
@@ -327,6 +327,32 @@ void BackScrool() {
 
 	//スコア等表示領域
 	DrawBox(500, 0, 640, 480, 0x009900, TRUE);
+
+	//計測時間を過ぎたらゲームオーバー
+	int Time = TIMELIMIT - (GetNowCount() - g_StartTime);
+	if (Time <= 1000) {
+		Time = 0;
+		g_GameState = 6;
+	}
+	DrawFormatString(550, 40, 0xFFFFFF, "TIME");
+	DrawFormatStringToHandle(543, 70, 0xffffff, FontHandle, "%02d", Time / 1000); //制限時間の描画
+
+	//スコアの描画
+	DrawFormatString(542, 170, 0xFFFFFF, "SCORE");
+	SetFontSize(27);
+	DrawFormatString(525, 200, 0xFFFFFF, "%06d", g_Score);	
+
+	//獲得したりんごの個数を描画
+	SetFontSize(20);
+	DrawFormatString(518, 275, 0x000000, "収穫した数");
+	DrawRotaGraph(538, 325, 0.9f, 0, g_Teki[2], TRUE, FALSE);
+	DrawRotaGraph(538, 375, 0.9f, 0, g_Teki[1], TRUE, FALSE);
+	DrawRotaGraph(538, 425, 0.9f, 0, g_Teki[0], TRUE, FALSE);
+
+	DrawFormatString(555, 317, 0xFFFFFF, " × %02d", g_AppleCount[2]);
+	DrawFormatString(555, 367, 0xFFFFFF, " × %02d", g_AppleCount[1]);
+	DrawFormatString(555, 417, 0xFFFFFF, " × %02d", g_AppleCount[0]);
+
 }
 
 //敵との当たり判定

@@ -8,7 +8,7 @@ const int SCREEN_HEIGHT = 480;
 
 const int APPLE_MAX = 10;
 
-const int TIMELIMIT = 30000;
+const int TIMELIMIT = 31000;
 
 extern int g_StartTime;		//スタート時間
 extern int g_WaitTime;		//待ち時間

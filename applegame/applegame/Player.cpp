@@ -109,13 +109,6 @@ void Player::PlayerControl() {
 	if (RestD > 0) {	//りんごDの効果時間をカウントする
 		RestD--;
 	}
-
-	//計測時間を過ぎたらゲームオーバー
-	int Time = TIMELIMIT - (GetNowCount() - g_StartTime);
-	if (Time <= 0) {
-		g_GameState = 6;
-	}
-	DrawFormatStringToHandle(495, 50, 0xffffff, FontHandle, "%3d", Time / 1000 + 1);
 }
 
 void Player::AppleColision(int i) {
