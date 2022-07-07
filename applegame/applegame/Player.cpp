@@ -132,8 +132,9 @@ void Player::AppleColision(int i) {
 
 			//矩形が重なれば当たり
 			if (px1 < ax2 && px2 > ax1 && py1 < ay2 && py2 > ay1) {
-				if (apple[i].GetType() == 3) RestD = 120;	//りんごDを取ったらペナルティの効果時間(120F)をセット
-				apple[i].flg = FALSE;
+				//if (apple[i].GetType() == 3) RestD = 120;	//りんごDを取ったらペナルティの効果時間(120F)をセット
+				//apple[i].flg = FALSE;
+				apple->AppleCount(apple[i].GetType(), i);
 			}
 		}
 }
@@ -141,4 +142,8 @@ void Player::AppleColision(int i) {
 //りんごDの処理
 int Player::GetD() {
 	return RestD;	//残り効果時間を返す
+}
+
+void Player::setRestD(int time) {
+	RestD = time;		//りんごDを取ったらペナルティの効果時間(120F)をセット
 }

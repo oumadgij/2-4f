@@ -66,6 +66,35 @@ void Apple::EnemyControl() {
 	
 }
 
+void Apple::AppleCount(int type, int i) {
+
+	//if (apple[i].GetType() == 3) {
+	//	player.setRestD(120);	//りんごDを取ったらペナルティの効果時間(120F)をセット
+	//}
+	//else if (true){
+
+	//}
+
+	switch (apple[i].GetType())
+	{
+	case 0:
+		g_AppleCount[0] = 10;
+		break;
+	case 1:
+		g_AppleCount[1] = 20;
+		break;
+	case 2:
+		g_AppleCount[2] = 30;
+		break;
+
+	case 3:
+		player.setRestD(120);	//りんごDを取ったらペナルティの効果時間(120F)をセット
+		break;
+	}
+	apple[i].flg = FALSE;
+	
+}
+
 int Apple::GetType() {
 	return type;
 }
