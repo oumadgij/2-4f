@@ -19,9 +19,6 @@ extern int g_NowKey;			//今回の入力キー
 extern int g_KeyFlg;			//入力キー情報
 
 extern int g_Score;			//スコア
-extern int g_EnemyCount1;		//敵カウント
-extern int g_EnemyCount2;
-extern int g_EnemyCount3;
-extern int g_EnemyCount4;
+extern int g_AppleCount[3];		//敵カウント
 
 extern int FontHandle;

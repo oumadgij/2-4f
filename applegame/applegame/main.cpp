@@ -14,10 +14,7 @@ int g_WaitTime;		//待ち時間
 int g_StartTime;		//スタート時間
 
 int g_Score;			//スコア
-int g_EnemyCount1;		//敵カウント
-int g_EnemyCount2;
-int g_EnemyCount3;
-int g_EnemyCount4;
+int g_AppleCount[3];	//リンゴを取った数
 
 int SpawnX[7] = { 0,0,0,0,0,0,0 };			//リンゴ生成位置(0:未生成 1:生成済み)
 
@@ -181,10 +178,9 @@ void GameInit(void) {
 	g_Score = 0;
 
 	//敵の初期設定
-	g_EnemyCount1 = 0;
-	g_EnemyCount2 = 0;
-	g_EnemyCount3 = 0;
-	g_EnemyCount4 = 0;
+	g_AppleCount[0] = 0;
+	g_AppleCount[1] = 0;
+	g_AppleCount[2] = 0;
 
 	//プレイヤー初期設定
 	player.Init();
