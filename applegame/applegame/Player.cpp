@@ -67,7 +67,7 @@ void Player::PlayerControl() {
 
 
 	//画像幅と高さの更新
-	if (g_NowKey & PAD_INPUT_LEFT || g_NowKey & PAD_INPUT_RIGHT) {
+	if (speed != 0) {
 		w = 60;
 		h = 80;
 	}
@@ -84,23 +84,23 @@ void Player::PlayerControl() {
 
 	//プレイヤーの表示
 	if ((RestD / 20) % 2 == 0) {
-		if (g_NowKey & PAD_INPUT_LEFT) {
+		if (speed < 0) {
 			angle = LEFT;
-			DrawGraph(x, y, g_PlayerImage[1], TRUE);
+			DrawGraph((int)x, y, g_PlayerImage[1], TRUE);
 		}
-		else if (g_NowKey & PAD_INPUT_RIGHT) {
+		else if (speed > 0) {
 			angle = RIGHT;
-			DrawTurnGraph(x, y, g_PlayerImage[1], TRUE);
+			DrawTurnGraph((int)x, y, g_PlayerImage[1], TRUE);
 		}
 		else {
 			switch (angle)
 			{
 			case LEFT:
-				DrawGraph(x, y, g_PlayerImage[0], TRUE);
+				DrawGraph((int)x, y, g_PlayerImage[0], TRUE);
 				break;
 
 			case RIGHT:
-				DrawTurnGraph(x, y, g_PlayerImage[0], TRUE);
+				DrawTurnGraph((int)x, y, g_PlayerImage[0], TRUE);
 				break;
 			}
 		}
