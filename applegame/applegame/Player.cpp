@@ -116,6 +116,10 @@ void Player::PlayerControl() {
 		g_GameState = 6;
 	}
 	DrawFormatStringToHandle(495, 50, 0xffffff, FontHandle, "%3d", Time / 1000 + 1);
+
+
+
+
 }
 
 void Player::AppleColision(int i) {
@@ -132,9 +136,8 @@ void Player::AppleColision(int i) {
 
 			//矩形が重なれば当たり
 			if (px1 < ax2 && px2 > ax1 && py1 < ay2 && py2 > ay1) {
-				//if (apple[i].GetType() == 3) RestD = 120;	//りんごDを取ったらペナルティの効果時間(120F)をセット
-				//apple[i].flg = FALSE;
-				apple->AppleCount(apple[i].GetType(), i);
+
+				apple->AppleCount(apple[i].GetType(), i);	//アップルカウント
 			}
 		}
 }

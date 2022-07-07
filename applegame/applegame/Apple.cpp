@@ -66,25 +66,19 @@ void Apple::EnemyControl() {
 	
 }
 
+//アップル種類別スコア加算
 void Apple::AppleCount(int type, int i) {
-
-	//if (apple[i].GetType() == 3) {
-	//	player.setRestD(120);	//りんごDを取ったらペナルティの効果時間(120F)をセット
-	//}
-	//else if (true){
-
-	//}
 
 	switch (apple[i].GetType())
 	{
 	case 0:
-		g_AppleCount[0] = 10;
+		++g_AppleCount[0];
 		break;
 	case 1:
-		g_AppleCount[1] = 20;
+		++g_AppleCount[1];
 		break;
 	case 2:
-		g_AppleCount[2] = 30;
+		++g_AppleCount[2];
 		break;
 
 	case 3:
@@ -92,6 +86,9 @@ void Apple::AppleCount(int type, int i) {
 		break;
 	}
 	apple[i].flg = FALSE;
+
+
+
 	
 }
 
