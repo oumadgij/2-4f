@@ -27,6 +27,13 @@ int g_Teki[4];			//敵画像変数
 int g_StageImage;		//ステージ画像変数
 int g_PlayerImage[2];	//キャラ画像
 
+int g_TitleBGM;         //タイトルBGM
+int g_MainBGM;          //ゲームメインBGM
+int g_CatchSE;			//A,B,Cのリンゴ取得時のSE
+int g_PoisonSE;			//Dのリンゴ取得時のSE
+int g_PauseSE;			//ポーズSE
+int g_FallSE;			//リンゴ出現SE
+
 int FontHandle;
 
 double NextTime;		//フレーム毎の経過時間
@@ -66,6 +73,7 @@ int  SaveRanking(void);		//ランキングデータの保存
 int  ReadRanking(void);		//ランキングデータ読み込み
 
 int LoadImages();			//画像読み込み
+int LoadSounds();			//音源読み込み
 
 void CheckPauseKey();	//ポーズ画面
 //プログラムの開始
@@ -81,6 +89,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	if (LoadImages() == -1)return -1;
+
+	if (LoadSounds() == -1) return -1;
 
 	if (ReadRanking() == -1)return -1;
 
@@ -146,6 +156,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 void DrawGameTitle(void) {
 	static int MenuNo = 0;
 
+	//タイトルBGMの再生
+	PlaySoundMem(g_TitleBGM, DX_PLAYTYPE_LOOP, FALSE);
+
 	if (MenuNo > 3 || MenuNo < 0) MenuNo = 0;
 
 	
@@ -196,6 +209,9 @@ void GameInit(void) {
 
 	//ゲームメイン処理へ
 	g_GameState = 5;
+
+	StopSoundMem(g_TitleBGM);
+	PlaySoundMem(g_MainBGM, DX_PLAYTYPE_LOOP, TRUE);    //メインBGMの再生
 }
 
 //ゲームランキング画面表示
@@ -258,7 +274,6 @@ void DrawEnd(void) {
 
 //ゲームメイン
 void GameMain(void) {
-
 	static int restapple = CheckApple();	//リンゴ生成可能数
 
 	BackScrool();
@@ -275,6 +290,7 @@ void GameMain(void) {
 				if (apple[j].flg == FALSE) {			//apple[j]のりんごが出現中か(フラグがTRUEか)
 					apple[j].Spawn(SpawnAppleX());		//非出現(フラグがFALSE)ならX座標を決定しリンゴを出現させる
 					j += APPLE_MAX;
+					PlaySoundMem(g_FallSE, DX_PLAYTYPE_BACK, TRUE);
 				}
 			}
 		}
@@ -357,6 +373,7 @@ void DrawGameOver(void) {
 
 	//スペースキーでメニューに戻る
 	if (g_KeyFlg & PAD_INPUT_B) {
+		StopSoundMem(g_MainBGM); //メインBGMを止める
 		if (g_Ranking[RANKING_DATA-1].score >= g_Score) {
 			g_GameState = 0;
 		}
@@ -506,6 +523,8 @@ int LoadImages() {
 void CheckPauseKey(void) {
 	if (g_KeyFlg & PAD_INPUT_8)		//指定キーでflgを1
 	{
+		StopSoundMem(g_MainBGM);  //メインBGMを止める
+		PlaySoundMem(g_PauseSE, DX_PLAYTYPE_BACK, TRUE);  //ポーズSEを再生
 		int flg = 1;
 
 		while (ProcessMessage() == 0 && flg)
@@ -514,15 +533,39 @@ void CheckPauseKey(void) {
 			g_NowKey = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 			g_KeyFlg = g_NowKey & ~g_OldKey;
 
-
 			SetFontSize(46);
 			DrawString(180, 200, "Xx-PAUSE-xX", GetColor(0, 0, 0), 1);
 
-
-			if (g_KeyFlg & PAD_INPUT_8)flg = 0;		//指定キーでFlgを0
+			if (g_KeyFlg & PAD_INPUT_8) {
+				flg = 0;		//指定キーでFlgを0
+				PlaySoundMem(g_MainBGM, DX_PLAYTYPE_LOOP, FALSE);
+			}
 
 			ScreenFlip();			//裏画面の内容を表画面に反映
 
 		}
 	}
+}
+
+int LoadSounds()
+{
+	//ゲームメインBGM
+	if ((g_MainBGM = LoadSoundMem("sounds/MainBGM.wav")) == -1) return -1;
+
+	//タイトルBGM
+	if ((g_TitleBGM = LoadSoundMem("sounds/TitleBGM.wav")) == -1) return -1;
+
+	//A～Cのリンゴ取得時のSE
+	if ((g_CatchSE = LoadSoundMem("sounds/catchSE.wav")) == -1) return-1;
+
+	//Dのリンゴ取得時のSE
+	if ((g_PoisonSE = LoadSoundMem("sounds/poisonSE.wav")) == -1) return -1;
+
+	//ポーズ画面に移行した時のSE
+	if ((g_PauseSE = LoadSoundMem("sounds/PoseSE.wav")) == -1) return -1;
+
+	//リンゴ出現時のSE
+	if ((g_FallSE = LoadSoundMem("sounds/FallSE.wav")) == -1)return -1;
+
+	return 0;
 }

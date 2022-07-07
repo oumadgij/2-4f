@@ -54,6 +54,7 @@ void Apple::SelectApple(void) {
 
 void Apple::EnemyControl() {
 		if (flg == TRUE) {
+
 			//敵の表示
 			DrawGraph(x, y, img, TRUE);
 

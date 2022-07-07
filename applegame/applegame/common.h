@@ -22,3 +22,7 @@ extern int g_Score;			//スコア
 extern int g_AppleCount[3];		//敵カウント
 
 extern int FontHandle;
+
+extern int g_MainBGM;          //ゲームメインBGM
+extern int g_CatchSE;			//A,B,Cのリンゴ取得時のSE
+extern int g_PoisonSE;			//Dのリンゴ取得時のSE

@@ -132,7 +132,14 @@ void Player::AppleColision(int i) {
 
 			//矩形が重なれば当たり
 			if (px1 < ax2 && px2 > ax1 && py1 < ay2 && py2 > ay1) {
-				if (apple[i].GetType() == 3) RestD = 120;	//りんごDを取ったらペナルティの効果時間(120F)をセット
+				if (apple[i].GetType() == 3){
+					RestD = 120;	//りんごDを取ったらペナルティの効果時間(120F)をセット
+
+					PlaySoundMem(g_PoisonSE, DX_PLAYTYPE_BACK, TRUE);  //りんごD取得時のSE
+				}
+				else {
+					PlaySoundMem(g_CatchSE, DX_PLAYTYPE_BACK, TRUE);  //りんごA～C取得時のSE
+				}
 				apple[i].flg = FALSE;
 			}
 		}
