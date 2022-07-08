@@ -40,13 +40,13 @@ void Player::Init() {
 
 void Player::PlayerControl() {
 
-	//���E�ړ�
+	//左右移動
 	if (g_NowKey & PAD_INPUT_LEFT) speed -= kansei;
 	if (g_NowKey & PAD_INPUT_RIGHT) speed += kansei;
-	//�X�s�[�h�̐���
+	//スピードの制限
 	if (speed > PLAYER_MAX_SPEED) speed = PLAYER_MAX_SPEED;
 	if (speed < -PLAYER_MAX_SPEED) speed = -PLAYER_MAX_SPEED;
-	//���͂��~�߂����̏���
+	//入力を止めた時の処理
 	if ((g_NowKey & PAD_INPUT_LEFT) == 0 && (g_NowKey & PAD_INPUT_RIGHT) == 0)
 	{
 		if (speed < -0.09f)
@@ -66,7 +66,7 @@ void Player::PlayerControl() {
 	x += speed;
 
 
-	//�摜���ƍ����̍X�V
+	//画像幅と高さの更新
 	if (speed != 0) {
 		w = 60;
 		h = 80;
@@ -77,12 +77,12 @@ void Player::PlayerControl() {
 	}
 	y = SCREEN_HEIGHT - h;
 
-	//��ʂ���o�Ȃ��悤�ɂ���
+	//画面から出ないようにする
 	if (x < 0)x = 0;
 
 	if (x > SCREEN_WIDTH - (140 + w))x = SCREEN_WIDTH - (140 + w);
 
-	//�v���C���[�̕\��
+	//プレイヤーの表示
 	if ((RestD / 20) % 2 == 0) {
 		if (speed < 0) {
 			angle = LEFT;
@@ -106,11 +106,12 @@ void Player::PlayerControl() {
 		}
 	}
 
-	if (RestD > 0) {	//���D�̌��ʎ��Ԃ��J�E���g����
+	if (RestD > 0) {	//りんごDの効果時間をカウントする
 		RestD--;
 	}
 
-	//�v�����Ԃ��߂�����Q�[���I�[�o�[
+
+	//計測時間を過ぎたらゲームオーバー
 	int Time = TIMELIMIT - (GetNowCount() - g_StartTime);
 	if (Time <= 0) {
 		g_GameState = 6;
@@ -122,30 +123,42 @@ void Player::PlayerControl() {
 }
 
 void Player::AppleColision(int i) {
-		if (apple[i].flg == TRUE) {	//���̃����S�͏o�����H
-			int px1 = x;		//�v���C���[X���W�n�_
-			int py1 = y;		//�v���C���[Y���W�n�_
-			int px2 = px1 + w;	//�v���C���[X���W�I�_
-			int py2 = py1 + h;	//�v���C���[Y���W�I�_
+		if (apple[i].flg == TRUE) {	//そのリンゴは出現中？
+			int px1 = x;		//プレイヤーX座標始点
+			int py1 = y;		//プレイヤーY座標始点
+			int px2 = px1 + w;	//プレイヤーX座標終点
+			int py2 = py1 + h;	//プレイヤーY座標終点
 
-			int ax1 = apple[i].GetX();	//���X�n�_
-			int ay1 = apple[i].GetY();	//���Y�n�_
-			int ax2 = ax1 + apple[i].GetWidth();			//���X�I
-			int ay2 = ay1 + apple[i].GetHeight();			//���Y�I�_
+			int ax1 = apple[i].GetX();	//りんごX始点
+			int ay1 = apple[i].GetY();	//りんごY始点
+			int ax2 = ax1 + apple[i].GetWidth();			//りんごX終
+			int ay2 = ay1 + apple[i].GetHeight();			//りんごY終点
 
-			//��`���d�Ȃ�Γ�����
+			//矩形が重なれば当たり
 			if (px1 < ax2 && px2 > ax1 && py1 < ay2 && py2 > ay1) {
 
-				apple[i].AppleCount();	//�A�b�v���J�E���g
+
+				apple[i].AppleCount();	//アップルカウント
+
+				if (apple[i].GetType() == 3){
+					//RestD = 120;	//りんごDを取ったらペナルティの効果時間(120F)をセット
+//idou
+					PlaySoundMem(g_PoisonSE, DX_PLAYTYPE_BACK, TRUE);  //りんごD取得時のSE
+				}
+				else {
+					PlaySoundMem(g_CatchSE, DX_PLAYTYPE_BACK, TRUE);  //りんごA～C取得時のSE
+				}
+				apple[i].flg = FALSE;
+
 			}
 		}
 }
 
-//���D�̏���
+//りんごDの処理
 int Player::GetD() {
-	return RestD;	//�c����ʎ��Ԃ�Ԃ�
+	return RestD;	//残り効果時間を返す
 }
 
 void Player::setRestD(int time) {
-	RestD = time;		//���D���������y�i���e�B�̌��ʎ���(120F)���Z�b�g
+	RestD = time;		//りんごDを取ったらペナルティの効果時間(120F)をセット
 }

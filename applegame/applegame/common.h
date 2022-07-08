@@ -8,7 +8,7 @@ const int SCREEN_HEIGHT = 480;
 
 const int APPLE_MAX = 10;
 
-const int TIMELIMIT = 30000;
+const int TIMELIMIT = 31000;
 
 extern int g_StartTime;		//スタート時間
 extern int g_WaitTime;		//待ち時間
@@ -22,3 +22,7 @@ extern int g_Score;			//スコア
 extern int g_AppleCount[3];		//敵カウント
 
 extern int FontHandle;
+
+extern int g_MainBGM;          //ゲームメインBGM
+extern int g_CatchSE;			//A,B,Cのリンゴ取得時のSE
+extern int g_PoisonSE;			//Dのリンゴ取得時のSE

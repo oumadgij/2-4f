@@ -2,7 +2,11 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
+
       <FullPath>C:\PG\2-4f\applegame\x64\Debug\applegame.exe</FullPath>
+
+      <FullPath>C:\Summer Production\2-4f\applegame\x64\Debug\applegame.exe</FullPath>
+
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />
