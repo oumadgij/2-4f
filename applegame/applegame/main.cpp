@@ -562,6 +562,7 @@ int LoadImages() {
 void CheckPauseKey(void) {
 	if (g_KeyFlg & PAD_INPUT_8)		//指定キーでflgを1
 	{
+		int AauseStartTime =GetNowCount() - g_StartTime;
 		StopSoundMem(g_MainBGM);  //メインBGMを止める
 		PlaySoundMem(g_PauseSE, DX_PLAYTYPE_BACK, TRUE);  //ポーズSEを再生
 		int flg = 1;
@@ -581,8 +582,11 @@ void CheckPauseKey(void) {
 			}
 
 			ScreenFlip();			//裏画面の内容を表画面に反映
-
 		}
+		
+		g_StartTime = (GetNowCount() - AauseStartTime);
+
+
 	}
 }
 

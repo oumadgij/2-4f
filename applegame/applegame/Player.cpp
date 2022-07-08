@@ -116,7 +116,7 @@ void Player::PlayerControl() {
 	if (Time <= 0) {
 		g_GameState = 6;
 	}
-	DrawFormatStringToHandle(495, 50, 0xffffff, FontHandle, "%3d", Time / 1000 + 1);
+	DrawFormatStringToHandle(335, 50, 0xffffff, FontHandle, "%3d", GetNowCount());
 
 
 
