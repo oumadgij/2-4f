@@ -40,13 +40,13 @@ void Player::Init() {
 
 void Player::PlayerControl() {
 
-	//¶‰EˆÚ“®
+	//å·¦å³ç§»å‹•
 	if (g_NowKey & PAD_INPUT_LEFT) speed -= kansei;
 	if (g_NowKey & PAD_INPUT_RIGHT) speed += kansei;
-	//ƒXƒs[ƒh‚Ì§ŒÀ
+	//ã‚¹ãƒ”ãƒ¼ãƒ‰ã®åˆ¶é™
 	if (speed > PLAYER_MAX_SPEED) speed = PLAYER_MAX_SPEED;
 	if (speed < -PLAYER_MAX_SPEED) speed = -PLAYER_MAX_SPEED;
-	//“ü—Í‚ğ~‚ß‚½‚Ìˆ—
+	//å…¥åŠ›ã‚’æ­¢ã‚ãŸæ™‚ã®å‡¦ç†
 	if ((g_NowKey & PAD_INPUT_LEFT) == 0 && (g_NowKey & PAD_INPUT_RIGHT) == 0)
 	{
 		if (speed < -0.09f)
@@ -66,7 +66,7 @@ void Player::PlayerControl() {
 	x += speed;
 
 
-	//‰æ‘œ•‚Æ‚‚³‚ÌXV
+	//ç”»åƒå¹…ã¨é«˜ã•ã®æ›´æ–°
 	if (speed != 0) {
 		w = 60;
 		h = 80;
@@ -77,12 +77,12 @@ void Player::PlayerControl() {
 	}
 	y = SCREEN_HEIGHT - h;
 
-	//‰æ–Ê‚©‚ço‚È‚¢‚æ‚¤‚É‚·‚é
+	//ç”»é¢ã‹ã‚‰å‡ºãªã„ã‚ˆã†ã«ã™ã‚‹
 	if (x < 0)x = 0;
 
 	if (x > SCREEN_WIDTH - (140 + w))x = SCREEN_WIDTH - (140 + w);
 
-	//ƒvƒŒƒCƒ„[‚Ì•\¦
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®è¡¨ç¤º
 	if ((RestD / 20) % 2 == 0) {
 		if (speed < 0) {
 			angle = LEFT;
@@ -106,39 +106,59 @@ void Player::PlayerControl() {
 		}
 	}
 
-	if (RestD > 0) {	//‚è‚ñ‚²D‚ÌŒø‰ÊŠÔ‚ğƒJƒEƒ“ƒg‚·‚é
+	if (RestD > 0) {	//ã‚Šã‚“ã”Dã®åŠ¹æœæ™‚é–“ã‚’ã‚«ã‚¦ãƒ³ãƒˆã™ã‚‹
 		RestD--;
 	}
+
+
+	//è¨ˆæ¸¬æ™‚é–“ã‚’éããŸã‚‰ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼
+	int Time = TIMELIMIT - (GetNowCount() - g_StartTime);
+	if (Time <= 0) {
+		g_GameState = 6;
+	}
+	DrawFormatStringToHandle(495, 50, 0xffffff, FontHandle, "%3d", Time / 1000 + 1);
+
+
+
 }
 
 void Player::AppleColision(int i) {
-		if (apple[i].flg == TRUE) {	//‚»‚ÌƒŠƒ“ƒS‚ÍoŒ»’†H
-			int px1 = x;		//ƒvƒŒƒCƒ„[XÀ•Wn“_
-			int py1 = y;		//ƒvƒŒƒCƒ„[YÀ•Wn“_
-			int px2 = px1 + w;	//ƒvƒŒƒCƒ„[XÀ•WI“_
-			int py2 = py1 + h;	//ƒvƒŒƒCƒ„[YÀ•WI“_
+		if (apple[i].flg == TRUE) {	//ãã®ãƒªãƒ³ã‚´ã¯å‡ºç¾ä¸­ï¼Ÿ
+			int px1 = x;		//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼Xåº§æ¨™å§‹ç‚¹
+			int py1 = y;		//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼Yåº§æ¨™å§‹ç‚¹
+			int px2 = px1 + w;	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼Xåº§æ¨™çµ‚ç‚¹
+			int py2 = py1 + h;	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼Yåº§æ¨™çµ‚ç‚¹
 
-			int ax1 = apple[i].GetX();	//‚è‚ñ‚²Xn“_
-			int ay1 = apple[i].GetY();	//‚è‚ñ‚²Yn“_
-			int ax2 = ax1 + apple[i].GetWidth();			//‚è‚ñ‚²XI
-			int ay2 = ay1 + apple[i].GetHeight();			//‚è‚ñ‚²YI“_
+			int ax1 = apple[i].GetX();	//ã‚Šã‚“ã”Xå§‹ç‚¹
+			int ay1 = apple[i].GetY();	//ã‚Šã‚“ã”Yå§‹ç‚¹
+			int ax2 = ax1 + apple[i].GetWidth();			//ã‚Šã‚“ã”Xçµ‚
+			int ay2 = ay1 + apple[i].GetHeight();			//ã‚Šã‚“ã”Yçµ‚ç‚¹
 
-			//‹éŒ`‚ªd‚È‚ê‚Î“–‚½‚è
+			//çŸ©å½¢ãŒé‡ãªã‚Œã°å½“ãŸã‚Š
 			if (px1 < ax2 && px2 > ax1 && py1 < ay2 && py2 > ay1) {
-				if (apple[i].GetType() == 3){
-					RestD = 120;	//‚è‚ñ‚²D‚ğæ‚Á‚½‚çƒyƒiƒ‹ƒeƒB‚ÌŒø‰ÊŠÔ(120F)‚ğƒZƒbƒg
 
-					PlaySoundMem(g_PoisonSE, DX_PLAYTYPE_BACK, TRUE);  //‚è‚ñ‚²Dæ“¾‚ÌSE
+
+				apple[i].AppleCount();	//ã‚¢ãƒƒãƒ—ãƒ«ã‚«ã‚¦ãƒ³ãƒˆ
+
+				if (apple[i].GetType() == 3){
+					//RestD = 120;	//ã‚Šã‚“ã”Dã‚’å–ã£ãŸã‚‰ãƒšãƒŠãƒ«ãƒ†ã‚£ã®åŠ¹æœæ™‚é–“(120F)ã‚’ã‚»ãƒƒãƒˆ
+//idou
+					PlaySoundMem(g_PoisonSE, DX_PLAYTYPE_BACK, TRUE);  //ã‚Šã‚“ã”Då–å¾—æ™‚ã®SE
 				}
 				else {
-					PlaySoundMem(g_CatchSE, DX_PLAYTYPE_BACK, TRUE);  //‚è‚ñ‚²A`Cæ“¾‚ÌSE
+					PlaySoundMem(g_CatchSE, DX_PLAYTYPE_BACK, TRUE);  //ã‚Šã‚“ã”Aï½Cå–å¾—æ™‚ã®SE
 				}
 				apple[i].flg = FALSE;
+
 			}
 		}
 }
 
-//‚è‚ñ‚²D‚Ìˆ—
+//ã‚Šã‚“ã”Dã®å‡¦ç†
 int Player::GetD() {
-	return RestD;	//c‚èŒø‰ÊŠÔ‚ğ•Ô‚·
+	return RestD;	//æ®‹ã‚ŠåŠ¹æœæ™‚é–“ã‚’è¿”ã™
+}
+
+void Player::setRestD(int time) {
+	RestD = time;		//ã‚Šã‚“ã”Dã‚’å–ã£ãŸã‚‰ãƒšãƒŠãƒ«ãƒ†ã‚£ã®åŠ¹æœæ™‚é–“(120F)ã‚’ã‚»ãƒƒãƒˆ
 }

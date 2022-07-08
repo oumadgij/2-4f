@@ -67,6 +67,33 @@ void Apple::EnemyControl() {
 	
 }
 
+//アップル種類別スコア加算
+void Apple::AppleCount() {
+
+	switch (type)
+	{
+	case 0:
+		++g_AppleCount[0];
+		break;
+	case 1:
+		++g_AppleCount[1];
+		break;
+	case 2:
+		++g_AppleCount[2];
+		break;
+
+	case 3:
+		player.setRestD(120);	//りんごDを取ったらペナルティの効果時間(120F)をセット
+		break;
+	}
+	g_Score += point;
+	if (g_Score < 0) {
+		g_Score = 0;
+	}
+	flg = FALSE;
+	
+}
+
 int Apple::GetType() {
 	return type;
 }

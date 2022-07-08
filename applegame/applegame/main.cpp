@@ -14,7 +14,7 @@ int g_WaitTime;		//待ち時間
 int g_StartTime;		//スタート時間
 
 int g_Score;			//スコア
-int g_AppleCount[3];	//リンゴを取った数
+int g_AppleCount[3] = { 0,0,0 };	//リンゴを取った数
 
 int SpawnX[7] = { 0,0,0,0,0,0,0 };			//リンゴ生成位置(0:未生成 1:生成済み)
 
