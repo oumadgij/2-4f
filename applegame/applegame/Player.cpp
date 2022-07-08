@@ -119,7 +119,6 @@ void Player::PlayerControl() {
 
 
 
-
 }
 
 void Player::AppleColision(int i) {
@@ -137,7 +136,7 @@ void Player::AppleColision(int i) {
 			//矩形が重なれば当たり
 			if (px1 < ax2 && px2 > ax1 && py1 < ay2 && py2 > ay1) {
 
-				apple->AppleCount(apple[i].GetType(), i);	//アップルカウント
+				apple[i].AppleCount();	//アップルカウント
 			}
 		}
 }

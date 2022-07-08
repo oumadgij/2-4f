@@ -21,7 +21,7 @@ public:
 	int GetY(void);	//	画像サイズ取得
 	int GetWidth(void);
 	int GetHeight(void);	//	画像サイズ取得
-	void AppleCount(int type,int i);
+	void AppleCount();
 };
 
 extern Apple apple[APPLE_MAX];
