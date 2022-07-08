@@ -33,6 +33,8 @@ int g_CatchSE;			//A,B,Cのリンゴ取得時のSE
 int g_PoisonSE;			//Dのリンゴ取得時のSE
 int g_PauseSE;			//ポーズSE
 int g_FallSE;			//リンゴ出現SE
+int g_cursorSE;			//カーソルSE
+int g_selectSE;			//セレクトSE
 
 int FontHandle;
 
@@ -164,13 +166,18 @@ void DrawGameTitle(void) {
 	
 	if (g_KeyFlg & PAD_INPUT_DOWN) {
 		if (++MenuNo > 3)MenuNo = 0;
+		PlaySoundMem(g_cursorSE, DX_PLAYTYPE_BACK, TRUE);
 	}
 	if (g_KeyFlg & PAD_INPUT_UP) {
 		if (--MenuNo < 0)MenuNo = 3;
+		PlaySoundMem(g_cursorSE, DX_PLAYTYPE_BACK, TRUE);
 	}
 
 	//Zキーでメニュー選択
-	if (g_KeyFlg & PAD_INPUT_A)g_GameState = MenuNo + 1;
+	if (g_KeyFlg & PAD_INPUT_A) {
+		g_GameState = MenuNo + 1;
+		PlaySoundMem(g_selectSE, DX_PLAYTYPE_BACK, TRUE);
+	}
 
 	//タイトル画像表示
 	DrawGraph(0, 0, g_TitleImage, FALSE);
@@ -218,7 +225,10 @@ void GameInit(void) {
 void DrawRanking(void) {
 
 	//スペースキーでメニューに戻る
-	if (g_KeyFlg & PAD_INPUT_B)g_GameState = 0;
+	if (g_KeyFlg & PAD_INPUT_B) {
+		g_GameState = 0;
+		PlaySoundMem(g_selectSE, DX_PLAYTYPE_BACK, TRUE);
+	}
 
 	//ランキング画面表示
 	DrawGraph(0, 0, g_RankingImage, FALSE);
@@ -237,7 +247,10 @@ void DrawRanking(void) {
 void DrawHelp(void) {
 
 	//スペースキーでメニューに戻る
-	if (g_KeyFlg & PAD_INPUT_B)g_GameState = 0;
+	if (g_KeyFlg & PAD_INPUT_B) {
+		g_GameState = 0;
+		PlaySoundMem(g_selectSE, DX_PLAYTYPE_BACK, TRUE);
+	}
 
 	//タイトル画像表示
 	DrawGraph(0, 0, g_TitleImage, FALSE);
@@ -592,6 +605,16 @@ int LoadSounds()
 
 	//リンゴ出現時のSE
 	if ((g_FallSE = LoadSoundMem("sounds/FallSE.wav")) == -1)return -1;
+
+	//カーソル移動SE
+	if ((g_cursorSE = LoadSoundMem("sounds/cursorSE.wav")) == -1)return -1;
+
+	//決定時のSE
+	if ((g_selectSE = LoadSoundMem("sounds/selectSE.wav")) == -1)return -1;
+
+	//音量調整
+	ChangeVolumeSoundMem(250, g_cursorSE);   //カーソル移動SE
+	ChangeVolumeSoundMem(400, g_PoisonSE);   //リンゴD取得時のSE
 
 	return 0;
 }
