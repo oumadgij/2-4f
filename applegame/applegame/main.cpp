@@ -11,7 +11,7 @@ int g_KeyFlg;			//入力キー情報
 
 int g_GameState = 0;	//ゲームモード
 int g_WaitTime;		//待ち時間
-int g_StartTime;		//スタート時間
+int g_TimeLimit;		//スタート時間
 
 int g_Score;			//スコア
 int g_AppleCount[3] = { 0,0,0 };	//リンゴを取った数
@@ -212,7 +212,7 @@ void GameInit(void) {
 	}
 
 	//現在経過時間を得る
-	g_StartTime = GetNowCount();
+	g_TimeLimit = 60*31;
 
 	//ゲームメイン処理へ
 	g_GameState = 5;
@@ -316,6 +316,11 @@ void GameMain(void) {
 	player.PlayerControl();	//プレイヤー制御
 	CheckPauseKey();	//ポーズ画面
 
+	//計測時間を過ぎたらゲームオーバー
+	if (g_TimeLimit-- <= 60) {
+		/*g_TimeLimit = 0;*/
+		g_GameState = 6;
+	}
 
 }
 
@@ -357,14 +362,9 @@ void BackScrool() {
 	//スコア等表示領域
 	DrawBox(500, 0, 640, 480, 0x009900, TRUE);
 
-	//計測時間を過ぎたらゲームオーバー
-	int Time = TIMELIMIT - (GetNowCount() - g_StartTime);
-	if (Time <= 1000) {
-		Time = 0;
-		g_GameState = 6;
-	}
+
 	DrawFormatString(550, 40, 0xFFFFFF, "TIME");
-	DrawFormatStringToHandle(543, 70, 0xffffff, FontHandle, "%02d", Time / 1000); //制限時間の描画
+	DrawFormatStringToHandle(543, 70, 0xffffff, FontHandle, "%02d", g_TimeLimit / 60); //制限時間の描画
 
 	//スコアの描画
 	DrawFormatString(542, 170, 0xFFFFFF, "SCORE");
