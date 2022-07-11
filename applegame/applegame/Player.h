@@ -16,6 +16,7 @@ public:
 	void PlayerControl();	//©‹@ˆ—
 	void AppleColision(int i);	//ƒŠƒ“ƒS‚Ì“–‚½‚è”»’è
 	int	 GetD();			//‚è‚ñ‚²D‚Ìˆ—
+	void setRestD(int time);
 };
 
 extern Player player;

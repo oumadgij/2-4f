@@ -54,6 +54,7 @@ void Apple::SelectApple(void) {
 
 void Apple::EnemyControl() {
 		if (flg == TRUE) {
+
 			//敵の表示
 			DrawGraph(x, y, img, TRUE);
 
@@ -63,6 +64,33 @@ void Apple::EnemyControl() {
 			//画面を出ると消滅
 			if (y > SCREEN_HEIGHT + h)flg = FALSE;
 		}
+	
+}
+
+//アップル種類別スコア加算
+void Apple::AppleCount() {
+
+	switch (type)
+	{
+	case 0:
+		++g_AppleCount[0];
+		break;
+	case 1:
+		++g_AppleCount[1];
+		break;
+	case 2:
+		++g_AppleCount[2];
+		break;
+
+	case 3:
+		player.setRestD(120);	//りんごDを取ったらペナルティの効果時間(120F)をセット
+		break;
+	}
+	g_Score += point;
+	if (g_Score < 0) {
+		g_Score = 0;
+	}
+	flg = FALSE;
 	
 }
 
