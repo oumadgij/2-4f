@@ -82,7 +82,7 @@ void CheckPauseKey();	//ポーズ画面
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	LPSTR lpCmdLine, int nCmdShow) {
 
-	SetMainWindowText("DriveGame");		//タイトルを設定
+	SetMainWindowText("りんご落とし");		//タイトルを設定
 
 	ChangeWindowMode(TRUE);
 
