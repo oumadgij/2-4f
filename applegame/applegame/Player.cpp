@@ -112,16 +112,44 @@ void Player::PlayerControl() {
 }
 
 void Player::AppleColision(int i) {
-		if (apple[i].flg == TRUE) {	//そのリンゴは出現中？
-			int px1 = x;		//プレイヤーX座標始点
-			int py1 = y;		//プレイヤーY座標始点
-			int px2 = px1 + w;	//プレイヤーX座標終点
-			int py2 = py1 + h;	//プレイヤーY座標終点
 
-			int ax1 = apple[i].GetX();	//りんごX始点
-			int ay1 = apple[i].GetY();	//りんごY始点
-			int ax2 = ax1 + apple[i].GetWidth();			//りんごX終
-			int ay2 = ay1 + apple[i].GetHeight();			//りんごY終点
+		if (apple[i].flg == TRUE) {	//そのリンゴは出現中？
+
+			int px1 = 0;		//プレイヤーX座標始点
+			int py1 = 0;		//プレイヤーY座標始点
+			int px2 = 0;	//プレイヤーX座標終点
+			int py2 = 0;	//プレイヤーY座標終点
+
+			if (speed == 0) {
+				px1 = x + 3;		//プレイヤーX座標始点
+				py1 = y + 1;		//プレイヤーY座標始点
+				px2 = px1 + w - 3;	//プレイヤーX座標終点
+				py2 = py1 + h;	//プレイヤーY座標終点
+			}
+			else {
+				switch (angle)
+				{
+				case LEFT:
+					px1 = x;		//プレイヤーX座標始点
+					py1 = y;		//プレイヤーY座標始点
+					px2 = px1 + w - 23;	//プレイヤーX座標終点
+					py2 = py1 + h;	//プレイヤーY座標終点
+					break;
+
+				case RIGHT:
+					px1 = x + 23;		//プレイヤーX座標始点
+					py1 = y;		//プレイヤーY座標始点
+					px2 = px1 + w - 23;	//プレイヤーX座標終点
+					py2 = py1 + h;	//プレイヤーY座標終点
+					break;
+				}
+				
+			}
+
+			int ax1 = apple[i].GetX() + 7;	//りんごX始点
+			int ay1 = apple[i].GetY() + 3;	//りんごY始点
+			int ax2 = ax1 + apple[i].GetWidth() - 14;			//りんごX終
+			int ay2 = ay1 + apple[i].GetHeight() - 10;			//りんごY終点
 
 			//矩形が重なれば当たり
 			if (px1 < ax2 && px2 > ax1 && py1 < ay2 && py2 > ay1) {

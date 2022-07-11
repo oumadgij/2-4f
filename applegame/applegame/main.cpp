@@ -1,4 +1,4 @@
-#include"DxLib.h"
+﻿#include"DxLib.h"
 #include"common.h"
 #include"Player.h"
 #include"Apple.h"
@@ -175,6 +175,7 @@ void DrawGameTitle(void) {
 	//Zキーでメニュー選択
 	if (g_KeyFlg & PAD_INPUT_A) {
 		g_GameState = MenuNo + 1;
+		MenuNo = 0;
 		PlaySoundMem(g_selectSE, DX_PLAYTYPE_BACK, TRUE);
 	}
 
@@ -216,7 +217,7 @@ void GameInit(void) {
 	PlayerName[10] = '\0';
 
 	//現在経過時間を得る
-	g_TimeLimit = 60*31;
+	g_TimeLimit = 60 * 31;
 
 	//ゲームメイン処理へ
 	g_GameState = 5;
@@ -277,6 +278,7 @@ void DrawHelp(void) {
 
 //ゲームエンド描画
 void DrawEnd(void) {
+	static int EndTime = 180;
 
 	//エンド画面表示
 	DrawGraph(0, 0, g_EndImage, FALSE);
@@ -285,7 +287,7 @@ void DrawEnd(void) {
 	DrawString(360, 480 - 24, "Thankyou for Playing", 0xffffff, 0);
 
 	//タイム加算処理&終了(3秒)
-	if (++g_WaitTime > 180)g_GameState = 99;
+	if (--EndTime < 0)g_GameState = 99;
 
 }
 
@@ -306,7 +308,7 @@ void GameMain(void) {
 			for (int j = i; j < APPLE_MAX; j++) {			
 				if (apple[j].flg == FALSE) {			//apple[j]のりんごが出現中か(フラグがTRUEか)
 					apple[j].Spawn(SpawnAppleX());		//非出現(フラグがFALSE)ならX座標を決定しリンゴを出現させる
-					j += APPLE_MAX;
+					break;						//ループを抜ける
 					PlaySoundMem(g_FallSE, DX_PLAYTYPE_BACK, TRUE);
 				}
 			}
@@ -366,6 +368,7 @@ void BackScrool() {
 	//スコア等表示領域
 	DrawBox(500, 0, 640, 480, 0x009900, TRUE);
 
+	SetFontSize(20);
 
 	DrawFormatString(550, 40, 0xFFFFFF, "TIME");
 	DrawFormatStringToHandle(543, 70, 0xffffff, FontHandle, "%02d", g_TimeLimit / 60); //制限時間の描画
@@ -417,11 +420,11 @@ void DrawGameOver(void) {
 	//スペースキーでメニューに戻る
 	if (g_KeyFlg & PAD_INPUT_B) {
 		StopSoundMem(g_MainBGM); //メインBGMを止める
-		if (g_Ranking[RANKING_DATA-1].score >= g_Score) {
-			g_GameState = 0;
+		if (g_Score > g_Ranking[RANKING_DATA - 1].score) {
+			g_GameState = 7;
 		}
 		else {
-			g_GameState = 7;
+			g_GameState = 0;
 		}
 	}
 
@@ -431,11 +434,16 @@ void DrawGameOver(void) {
  //ランキング入力処理
 void InputRanking(void)
 {
+	//文字配列
 	static char NAME[27] = { 'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z' };
 	static char name[27] = { 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z' };
 	static char number[10] = { '0','1','2','3','4','5','6','7','8','9' };
+
+	//アイコン
 	static int IconX = 0;
 	static int IconY = 0;
+
+	//文字入力位置
 	static int Input = 0;
 
 	while (PlayerName[Input] != NULL && Input < 10) {
@@ -458,14 +466,15 @@ void InputRanking(void)
 	}
 	DrawString(45 * 11 + 40, 400, "END", 0xffffff);
 
-	if (IconX > 9 && IconY > 3) {
-		DrawBox(45 * 11 + 40 - 10, 50 * 4 + 200 - 5, 45 * 12 + 40 + 30, 50 * 4 + 205 + 35, 0x00ffff, FALSE);
+	//カーソル描画
+	if (IconX > 9 && IconY > 3) {	//カーソルがENDに移動した?
+		DrawBox(45 * 11 + 40 - 10, 50 * 4 + 200 - 5, 45 * 12 + 40 + 30, 50 * 4 + 205 + 35, 0x00ffff, FALSE);	//したならカーソルをENDの上に
 		if (g_KeyFlg & PAD_INPUT_DOWN)	IconY = 0;
 		if (g_KeyFlg & PAD_INPUT_UP)	IconY = 3;
 		if (g_KeyFlg & PAD_INPUT_RIGHT)	IconX = 0;
 		if (g_KeyFlg & PAD_INPUT_LEFT)	IconX = 9;
 	}
-	else {
+	else {																										//してなければ文字の上に
 		DrawBox(45 * IconX + 40 - 10, 50 * IconY + 200 - 5, 45 * IconX + 40 + 30, 50 * IconY + 205 + 35, 0x00ffff, FALSE);
 		if (g_KeyFlg & PAD_INPUT_DOWN) {
 			if (++IconY > 4)IconY = 0;
@@ -480,16 +489,17 @@ void InputRanking(void)
 			if (--IconX < 0)IconX = 12;
 		}
 	}
-	if (PlayerName[9] != NULL) {
+	if (PlayerName[9] != NULL) {		//最大まで入力されているならアイコンをENDに固定
 		IconX = 12;
 		IconY = 4;
 	}
 
-	if (g_KeyFlg & PAD_INPUT_A) {
-		if (IconY <= 1)PlayerName[Input] = NAME[IconX + (IconY * 13)];
-		else if (IconY <= 3)PlayerName[Input] = name[IconX + ((IconY - 2) * 13)];
-		else if (IconX <= 9)PlayerName[Input] = number[IconX];
-		else {
+	//入力
+	if (g_KeyFlg & PAD_INPUT_A) {	//Aが押された
+		if (IconY <= 1)PlayerName[Input] = NAME[IconX + (IconY * 13)];				//カーソルが大文字の上なら大文字の入力
+		else if (IconY <= 3)PlayerName[Input] = name[IconX + ((IconY - 2) * 13)];	//　　　　　小文字の上なら小文字の入力
+		else if (IconX <= 9)PlayerName[Input] = number[IconX];						//			数字の上　なら　数字の入力
+		else {																	 //どれでもない（ENDの上）なら　　入力終了
 			for (int i = 0; i < 11; i++) {
 				g_Ranking[4].name[i] = PlayerName[i];
 			}
@@ -510,14 +520,6 @@ void InputRanking(void)
 		DrawFormatString(25 * i + 40, 140, 0xff0000, "%c", PlayerName[i]);
 		DrawBox(25 * i + 40, 175, 25 * i + 60, 180, 0xffffff, TRUE);
 	}
-
-	//// 名前の入力
-	//if (KeyInputSingleCharString(170, 310, 10, g_Ranking[4].name, FALSE) == 1) {
-	//	g_Ranking[4].score = g_Score;	// ランキングデータの5番目にスコアを登録
-	//	SortRanking();		// ランキング並べ替え
-	//	SaveRanking();		// ランキングデータの保存
-	//	g_GameState = 2;		// ゲームモードの変更
-	//}
 
 }
 
