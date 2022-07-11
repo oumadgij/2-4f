@@ -610,11 +610,11 @@ int LoadImages() {
 	if ((g_TitleImage = LoadGraph("images/Title.bmp")) == -1)return -1;
 
 	//メニュー
-	if ((g_Menu = LoadGraph("images/menu.bmp")) == -1)return -1;
+	if ((g_Menu = LoadGraph("images/menu.png")) == -1)return -1;
 	if ((g_Cone = LoadGraph("images/leaf.png")) == -1)return -1;
 
 	//ランキング
-	if ((g_RankingImage = LoadGraph("images/Ranking.bmp")) == -1)return -1;
+	if ((g_RankingImage = LoadGraph("images/Ranking.png")) == -1)return -1;
 
 	//ステージ背景
 	if ((g_StageImage = LoadGraph("images/back.png")) == -1)return -1;
