@@ -19,7 +19,7 @@ int g_AppleCount[3] = { 0,0,0 };	//リンゴを取った数
 int SpawnX[7] = { 0,0,0,0,0,0,0 };			//リンゴ生成位置(0:未生成 1:生成済み)
 
 int g_TitleImage;		//画像用変数
-int g_Menu, g_Cone;		//メニュー画像変数
+int g_Menu, g_Leaf;		//メニュー画像変数
 int g_RankingImage;		//ランキング画像用変数
 int g_Item[2];			//アイテム画像変数
 int g_EndImage;			//エンド画面用変数
@@ -184,10 +184,10 @@ void DrawGameTitle(void) {
 	DrawGraph(0, 0, g_TitleImage, FALSE);
 
 	//メニュー
-	DrawGraph(120, 200, g_Menu, TRUE);
+	DrawGraph(390, 270, g_Menu, TRUE);
 
 	//メニューカーソル
-	DrawRotaGraph(90, 220 + MenuNo * 40, 0.7f, 0, g_Cone, TRUE);
+	DrawRotaGraph(360, 290 + MenuNo * 40, 0.7f, 0, g_Leaf, TRUE);
 }
 
 //ゲーム初期処理
@@ -387,9 +387,9 @@ void BackScrool() {
 	DrawRotaGraph(538, 375, 0.9f, 0, g_Teki[1], TRUE, FALSE);
 	DrawRotaGraph(538, 425, 0.9f, 0, g_Teki[0], TRUE, FALSE);
 
-	DrawFormatString(555, 317, 0xFFFFFF, " × %02d", g_AppleCount[2]);
-	DrawFormatString(555, 367, 0xFFFFFF, " × %02d", g_AppleCount[1]);
-	DrawFormatString(555, 417, 0xFFFFFF, " × %02d", g_AppleCount[0]);
+	DrawFormatString(555, 317, 0xFFFFFF, " × %2d", g_AppleCount[2]);
+	DrawFormatString(555, 367, 0xFFFFFF, " × %2d", g_AppleCount[1]);
+	DrawFormatString(555, 417, 0xFFFFFF, " × %2d", g_AppleCount[0]);
 
 }
 
@@ -609,11 +609,11 @@ int ReadRanking(void)
 int LoadImages() {
 
 	//タイトル
-	if ((g_TitleImage = LoadGraph("images/Title.bmp")) == -1)return -1;
+	if ((g_TitleImage = LoadGraph("images/Title.png")) == -1)return -1;
 
 	//メニュー
 	if ((g_Menu = LoadGraph("images/menu.png")) == -1)return -1;
-	if ((g_Cone = LoadGraph("images/leaf.png")) == -1)return -1;
+	if ((g_Leaf = LoadGraph("images/leaf.png")) == -1)return -1;
 
 	//ランキング
 	if ((g_RankingImage = LoadGraph("images/Ranking.png")) == -1)return -1;
