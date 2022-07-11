@@ -26,6 +26,7 @@ int g_EndImage;			//エンド画面用変数
 int g_Teki[4];			//敵画像変数
 int g_StageImage;		//ステージ画像変数
 int g_PlayerImage[2];	//キャラ画像
+int g_HelpImage;
 
 int g_TitleBGM;         //タイトルBGM
 int g_MainBGM;          //ゲームメインBGM
@@ -258,7 +259,8 @@ void DrawHelp(void) {
 	}
 
 	//タイトル画像表示
-	DrawGraph(0, 0, g_TitleImage, FALSE);
+	DrawGraph(0, 0, g_HelpImage, FALSE);
+
 	SetFontSize(16);
 	DrawString(20, 120, "- HELP -", 0xffffff, 0);
 
@@ -626,6 +628,8 @@ int LoadImages() {
 	//敵
 	if (LoadDivGraph("images/apple.png", 4, 4, 1, 40, 40, g_Teki) == -1)return -1;
 
+	//help
+	if ((g_HelpImage = LoadGraph("images/help.png")) == -1)return -1;
 	//エンディング
 	if ((g_EndImage = LoadGraph("images/End.bmp")) == -1)return -1;
 
