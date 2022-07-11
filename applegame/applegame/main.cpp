@@ -31,14 +31,13 @@ int FontHandle;
 
 double NextTime;		//フレーム毎の経過時間
 
-//自機初期値
-
 //ランキングデータ(構造体)
 struct RankingData {
 	int no;
 	char name[11];
 	long score;
 };
+char PlayerName[11];
 
 //ランキングデータ変数宣言
 struct RankingData	g_Ranking[RANKING_DATA];
@@ -72,7 +71,7 @@ void CheckPauseKey();	//ポーズ画面
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	LPSTR lpCmdLine, int nCmdShow) {
 
-	SetMainWindowText("DriveGame");		//タイトルを設定
+	SetMainWindowText("りんごおとし");		//タイトルを設定
 
 	ChangeWindowMode(TRUE);
 
@@ -190,6 +189,11 @@ void GameInit(void) {
 	for (int i = 0; i < APPLE_MAX; i++) {
 		apple[i].flg = FALSE;
 	}
+
+	for (int i = 0; i < 10; i++) {
+		PlayerName[i] = NULL;
+	}
+	PlayerName[10] = '\0';
 
 	//現在経過時間を得る
 	g_StartTime = GetNowCount();
@@ -371,25 +375,93 @@ void DrawGameOver(void) {
  //ランキング入力処理
 void InputRanking(void)
 {
+	static char NAME[27] = { 'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z' };
+	static char name[27] = { 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z' };
+	static char number[10] = { '0','1','2','3','4','5','6','7','8','9' };
+	static int IconX = 0;
+	static int IconY = 0;
+	static int Input = 0;
+
+	while (PlayerName[Input] != NULL && Input < 10) {
+		Input++;
+	}
+
 	//ランキング画像表示
 	DrawGraph(0, 0, g_RankingImage, FALSE);
 
 	// フォントサイズの設定
-	SetFontSize(20);
+	SetFontSize(40);
 
 	// 名前入力指示文字列の描画
-	DrawString(150, 240, "ランキングに登録します", 0xFFFFFF);
-	DrawString(150, 270, "名前を英字で入力してください", 0xFFFFFF);
-
-	// 名前の入力
-	DrawString(150, 310, "> ", 0xFFFFFF);
-	DrawBox(160, 305, 300, 335, 0x000055, TRUE);
-	if (KeyInputSingleCharString(170, 310, 10, g_Ranking[4].name, FALSE) == 1) {
-		g_Ranking[4].score = g_Score;	// ランキングデータの5番目にスコアを登録
-		SortRanking();		// ランキング並べ替え
-		SaveRanking();		// ランキングデータの保存
-		g_GameState = 2;		// ゲームモードの変更
+	for (int i = 0; i < 13; i++) {
+		DrawFormatString(45 * i + 40, 200, 0xffffff, "%c", NAME[i]);
+		DrawFormatString(45 * i + 40, 250, 0xffffff, "%c", NAME[i + 13]);
+		DrawFormatString(45 * i + 40, 300, 0xffffff, "%c", name[i]);
+		DrawFormatString(45 * i + 40, 350, 0xffffff, "%c", name[i + 13]);
+		if (i < 10)DrawFormatString((45 * i) + 40, 400, 0xffffff, "%c", number[i]);
 	}
+	DrawString(45 * 11 + 40, 400, "END", 0xffffff);
+
+	if (IconX > 9 && IconY > 3) {
+		DrawBox(45 * 11 + 40 - 10, 50 * 4 + 200 - 5, 45 * 12 + 40 + 30, 50 * 4 + 205 + 35, 0x00ffff, FALSE);
+		if (g_KeyFlg & PAD_INPUT_DOWN)	IconY = 0;
+		if (g_KeyFlg & PAD_INPUT_UP)	IconY = 3;
+		if (g_KeyFlg & PAD_INPUT_RIGHT)	IconX = 0;
+		if (g_KeyFlg & PAD_INPUT_LEFT)	IconX = 9;
+	}
+	else {
+		DrawBox(45 * IconX + 40 - 10, 50 * IconY + 200 - 5, 45 * IconX + 40 + 30, 50 * IconY + 205 + 35, 0x00ffff, FALSE);
+		if (g_KeyFlg & PAD_INPUT_DOWN) {
+			if (++IconY > 4)IconY = 0;
+		}
+		if (g_KeyFlg & PAD_INPUT_UP) {
+			if (--IconY < 0)IconY = 4;
+		}
+		if (g_KeyFlg & PAD_INPUT_RIGHT) {
+			if (++IconX > 12)IconX = 0;
+		}
+		if (g_KeyFlg & PAD_INPUT_LEFT) {
+			if (--IconX < 0)IconX = 12;
+		}
+	}
+	if (PlayerName[9] != NULL) {
+		IconX = 12;
+		IconY = 4;
+	}
+
+	if (g_KeyFlg & PAD_INPUT_A) {
+		if (IconY <= 1)PlayerName[Input] = NAME[IconX + (IconY * 13)];
+		else if (IconY <= 3)PlayerName[Input] = name[IconX + ((IconY - 2) * 13)];
+		else if (IconX <= 9)PlayerName[Input] = number[IconX];
+		else {
+			for (int i = 0; i < 11; i++) {
+				g_Ranking[4].name[i] = PlayerName[i];
+			}
+			g_Ranking[4].score = g_Score;
+			SortRanking();		// ランキング並べ替え
+			SaveRanking();		// ランキングデータの保存
+			Input = 0;
+			g_GameState = 2;		// ゲームモードの変更
+		}
+
+	}
+	if (g_KeyFlg & PAD_INPUT_B && Input >= 1) {
+		PlayerName[Input - 1] = NULL;
+		Input--;
+	}
+
+	for (int i = 0; i < 10; i++) {
+		DrawFormatString(25 * i + 40, 140, 0xff0000, "%c", PlayerName[i]);
+		DrawBox(25 * i + 40, 175, 25 * i + 60, 180, 0xffffff, TRUE);
+	}
+
+	//// 名前の入力
+	//if (KeyInputSingleCharString(170, 310, 10, g_Ranking[4].name, FALSE) == 1) {
+	//	g_Ranking[4].score = g_Score;	// ランキングデータの5番目にスコアを登録
+	//	SortRanking();		// ランキング並べ替え
+	//	SaveRanking();		// ランキングデータの保存
+	//	g_GameState = 2;		// ゲームモードの変更
+	//}
 
 }
 
