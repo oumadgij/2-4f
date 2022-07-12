@@ -1,6 +1,9 @@
 #pragma once
 #define	_USE_MATH_DEFINES
 #define	RANKING_DATA	5
+#define hold	65535/4
+
+#include "DxLib.h"
 
 //画面領域の大きさ
 const int SCREEN_WIDTH = 640;
@@ -14,9 +17,8 @@ extern int g_TimeLimit;		//スタート時間
 extern int g_WaitTime;		//待ち時間
 extern int g_GameState;		// ゲームステータス
 
-extern int g_OldKey;			//前回の入力キー
-extern int g_NowKey;			//今回の入力キー
-extern int g_KeyFlg;			//入力キー情報
+extern XINPUT_STATE g_OldKey;			//前回の入力キー
+extern XINPUT_STATE g_NowKey;			//今回の入力キー
 
 extern int g_Score;			//スコア
 extern int g_AppleCount[3];		//敵カウント

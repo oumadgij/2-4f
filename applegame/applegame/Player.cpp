@@ -20,7 +20,7 @@ Player::Player() {
 	h = 100;
 	x = SCREEN_WIDTH / 2;
 	y = SCREEN_HEIGHT - h;
-	angle = 0.0;
+	angle = 0;
 	RestD = 0;
 	speed = 0.0f;
 	kansei = 0.1f;
@@ -41,13 +41,13 @@ void Player::Init() {
 void Player::PlayerControl() {
 
 	//左右移動
-	if (g_NowKey & PAD_INPUT_LEFT) speed -= kansei;
-	if (g_NowKey & PAD_INPUT_RIGHT) speed += kansei;
+	if (g_NowKey.ThumbLX < -hold) speed -= kansei;
+	if (g_NowKey.ThumbLX > hold) speed += kansei;
 	//スピードの制限
 	if (speed > PLAYER_MAX_SPEED) speed = PLAYER_MAX_SPEED;
 	if (speed < -PLAYER_MAX_SPEED) speed = -PLAYER_MAX_SPEED;
 	//入力を止めた時の処理
-	if ((g_NowKey & PAD_INPUT_LEFT) == 0 && (g_NowKey & PAD_INPUT_RIGHT) == 0)
+	if (g_NowKey.ThumbLX > -hold && g_NowKey.ThumbLX < hold)
 	{
 		if (speed < -0.09f)
 		{
@@ -121,8 +121,8 @@ void Player::AppleColision(int i) {
 			int py2 = 0;	//プレイヤーY座標終点
 
 			if (speed == 0) {
-				px1 = x + 3;		//プレイヤーX座標始点
-				py1 = y + 1;		//プレイヤーY座標始点
+				px1 = (int)x + 3;		//プレイヤーX座標始点
+				py1 = (int)y + 1;		//プレイヤーY座標始点
 				px2 = px1 + w - 3;	//プレイヤーX座標終点
 				py2 = py1 + h;	//プレイヤーY座標終点
 			}
