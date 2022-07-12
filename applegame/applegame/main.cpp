@@ -285,9 +285,6 @@ void DrawEnd(void) {
 	//エンド画面表示
 	DrawGraph(0, 0, g_EndImage, FALSE);
 
-	SetFontSize(24);
-	DrawString(360, 480 - 24, "Thankyou for Playing", 0xffffff, 0);
-
 	//タイム加算処理&終了(3秒)
 	if (--EndTime < 0)g_GameState = 99;
 
@@ -631,7 +628,7 @@ int LoadImages() {
 	//help
 	if ((g_HelpImage = LoadGraph("images/help.png")) == -1)return -1;
 	//エンディング
-	if ((g_EndImage = LoadGraph("images/End.bmp")) == -1)return -1;
+	if ((g_EndImage = LoadGraph("images/end.png")) == -1)return -1;
 
 	return 0;
 }
