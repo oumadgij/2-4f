@@ -5,9 +5,9 @@
 #include <math.h>
 
 //変数の宣言
-int g_OldKey;			//前回の入力キー
-int g_NowKey;			//今回の入力キー
-int g_KeyFlg;			//入力キー情報
+XINPUT_STATE g_OldKey;			//前回の入力キー
+XINPUT_STATE g_NowKey;			//今回の入力キー
+//int g_KeyFlg;			//入力キー情報
 
 int g_GameState = 0;	//ゲームモード
 int g_WaitTime;		//待ち時間
@@ -97,11 +97,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	FontHandle = CreateFontToHandle(NULL, 55, 3, DX_FONTTYPE_NORMAL);
 
-	while (ProcessMessage() == 0 && g_GameState != 99 && !(g_KeyFlg & PAD_INPUT_START)) {
+	while (ProcessMessage() == 0 && g_GameState != 99 && !(g_NowKey.Buttons[XINPUT_BUTTON_BACK])) {
 	
 		g_OldKey = g_NowKey;
-		g_NowKey = GetJoypadInputState(DX_INPUT_KEY_PAD1);
-		g_KeyFlg = g_NowKey & ~g_OldKey;
+		GetJoypadXInputState(DX_INPUT_PAD1, &g_NowKey);
 
 		ClearDrawScreen();	//画面の初期化
 
@@ -163,17 +162,17 @@ void DrawGameTitle(void) {
 	if (MenuNo > 3 || MenuNo < 0) MenuNo = 0;
 
 	
-	if (g_KeyFlg & PAD_INPUT_DOWN) {
-		if (++MenuNo > 3)MenuNo = 0;
+	if (g_OldKey.ThumbLY <= hold && g_NowKey.ThumbLY > hold) {
+		if (--MenuNo < 0)MenuNo = 3;
 		PlaySoundMem(g_cursorSE, DX_PLAYTYPE_BACK, TRUE);
 	}
-	if (g_KeyFlg & PAD_INPUT_UP) {
-		if (--MenuNo < 0)MenuNo = 3;
+	if (g_OldKey.ThumbLY >= -hold && g_NowKey.ThumbLY < -hold) {
+		if (++MenuNo > 3)MenuNo = 0;
 		PlaySoundMem(g_cursorSE, DX_PLAYTYPE_BACK, TRUE);
 	}
 
 	//Zキーでメニュー選択
-	if (g_KeyFlg & PAD_INPUT_A) {
+	if (!(g_OldKey.Buttons[XINPUT_BUTTON_A]) && g_NowKey.Buttons[XINPUT_BUTTON_A]) {
 		g_GameState = MenuNo + 1;
 		MenuNo = 0;
 		PlaySoundMem(g_selectSE, DX_PLAYTYPE_BACK, TRUE);
@@ -229,8 +228,8 @@ void GameInit(void) {
 //ゲームランキング画面表示
 void DrawRanking(void) {
 
-	//スペースキーでメニューに戻る
-	if (g_KeyFlg & PAD_INPUT_B) {
+	//Bでメニューに戻る
+	if (!(g_OldKey.Buttons[XINPUT_BUTTON_B]) && g_NowKey.Buttons[XINPUT_BUTTON_B]) {
 		g_GameState = 0;
 		PlaySoundMem(g_selectSE, DX_PLAYTYPE_BACK, TRUE);
 	}
@@ -244,15 +243,15 @@ void DrawRanking(void) {
 		DrawFormatString(50, 170 + i * 25, 0xffffff, "%2d %-10s %10d", g_Ranking[i].no, g_Ranking[i].name, g_Ranking[i].score);
 	}
 
-	DrawString(100, 450, "---- PRESS SPACE KEY TO TITLE ----", 0xffffff, 0);
+	DrawString(100, 450, "---- PRESS B BUTTON TO TITLE ----", 0xffffff, 0);
 
 }
 
 //ゲームヘルプ描画
 void DrawHelp(void) {
 
-	//スペースキーでメニューに戻る
-	if (g_KeyFlg & PAD_INPUT_B) {
+	//Bでメニューに戻る
+	if (!(g_OldKey.Buttons[XINPUT_BUTTON_B]) && g_NowKey.Buttons[XINPUT_BUTTON_B]) {
 		g_GameState = 0;
 		PlaySoundMem(g_selectSE, DX_PLAYTYPE_BACK, TRUE);
 	}
@@ -272,7 +271,7 @@ void DrawHelp(void) {
 	DrawGraph(20, 335, g_Item[1], TRUE);
 	DrawString(20, 385, "耐久を回復できる", 0xffffff, 0);
 	DrawString(20, 405, "無傷なら燃料を少し回復できる", 0xffffff, 0);
-	DrawString(150, 450, "---- PRESS SPACE KEY TO TITLE ----", 0xffffff, 0);
+	DrawString(150, 450, "---- PRESS B BUTTON TO TITLE ----", 0xffffff, 0);
 
 }
 
@@ -418,7 +417,7 @@ void DrawGameOver(void) {
 	BackScrool();
 
 	//スペースキーでメニューに戻る
-	if (g_KeyFlg & PAD_INPUT_B) {
+	if (!(g_OldKey.Buttons[XINPUT_BUTTON_B]) && g_NowKey.Buttons[XINPUT_BUTTON_B]) {
 		StopSoundMem(g_MainBGM); //メインBGMを止める
 		if (g_Score > g_Ranking[RANKING_DATA - 1].score) {
 			g_GameState = 7;
@@ -428,7 +427,7 @@ void DrawGameOver(void) {
 		}
 	}
 
-	DrawString(150, 450, "---- PRESS SPACE KEY TO TITLE ----", 0xffffff, 0);
+	DrawString(150, 450, "---- PRESS B BUTTON TO TITLE ----", 0xffffff, 0);
 }
 
  //ランキング入力処理
@@ -458,34 +457,34 @@ void InputRanking(void)
 
 	// 名前入力指示文字列の描画
 	for (int i = 0; i < 13; i++) {
-		DrawFormatString(45 * i + 40, 200, 0xffffff, "%c", NAME[i]);
-		DrawFormatString(45 * i + 40, 250, 0xffffff, "%c", NAME[i + 13]);
-		DrawFormatString(45 * i + 40, 300, 0xffffff, "%c", name[i]);
-		DrawFormatString(45 * i + 40, 350, 0xffffff, "%c", name[i + 13]);
-		if (i < 10)DrawFormatString((45 * i) + 40, 400, 0xffffff, "%c", number[i]);
+		DrawFormatString(45 * i + 40, 200, 0x000000, "%c", NAME[i]);
+		DrawFormatString(45 * i + 40, 250, 0x000000, "%c", NAME[i + 13]);
+		DrawFormatString(45 * i + 40, 300, 0x000000, "%c", name[i]);
+		DrawFormatString(45 * i + 40, 350, 0x000000, "%c", name[i + 13]);
+		if (i < 10)DrawFormatString((45 * i) + 40, 400, 0x000000, "%c", number[i]);
 	}
-	DrawString(45 * 11 + 40, 400, "END", 0xffffff);
+	DrawString(45 * 11 + 40, 400, "END", 0x000000);
 
 	//カーソル描画
 	if (IconX > 9 && IconY > 3) {	//カーソルがENDに移動した?
 		DrawBox(45 * 11 + 40 - 10, 50 * 4 + 200 - 5, 45 * 12 + 40 + 30, 50 * 4 + 205 + 35, 0x00ffff, FALSE);	//したならカーソルをENDの上に
-		if (g_KeyFlg & PAD_INPUT_DOWN)	IconY = 0;
-		if (g_KeyFlg & PAD_INPUT_UP)	IconY = 3;
-		if (g_KeyFlg & PAD_INPUT_RIGHT)	IconX = 0;
-		if (g_KeyFlg & PAD_INPUT_LEFT)	IconX = 9;
+		if (g_OldKey.ThumbLY >= -hold && g_NowKey.ThumbLY < -hold)	IconY = 0;
+		if (g_OldKey.ThumbLY <= hold && g_NowKey.ThumbLY > hold)	IconY = 3;
+		if (g_OldKey.ThumbLX >= -hold && g_NowKey.ThumbLX < -hold)	IconX = 9;
+		if (g_OldKey.ThumbLX <= hold && g_NowKey.ThumbLX > hold)	IconX = 0;
 	}
 	else {																										//してなければ文字の上に
 		DrawBox(45 * IconX + 40 - 10, 50 * IconY + 200 - 5, 45 * IconX + 40 + 30, 50 * IconY + 205 + 35, 0x00ffff, FALSE);
-		if (g_KeyFlg & PAD_INPUT_DOWN) {
+		if (g_OldKey.ThumbLY >= -hold && g_NowKey.ThumbLY < -hold) {
 			if (++IconY > 4)IconY = 0;
 		}
-		if (g_KeyFlg & PAD_INPUT_UP) {
+		if (g_OldKey.ThumbLY <= hold && g_NowKey.ThumbLY > hold) {
 			if (--IconY < 0)IconY = 4;
 		}
-		if (g_KeyFlg & PAD_INPUT_RIGHT) {
+		if (g_OldKey.ThumbLX <= hold && g_NowKey.ThumbLX > hold) {
 			if (++IconX > 12)IconX = 0;
 		}
-		if (g_KeyFlg & PAD_INPUT_LEFT) {
+		if (g_OldKey.ThumbLX >= -hold && g_NowKey.ThumbLX < -hold) {
 			if (--IconX < 0)IconX = 12;
 		}
 	}
@@ -495,7 +494,7 @@ void InputRanking(void)
 	}
 
 	//入力
-	if (g_KeyFlg & PAD_INPUT_A) {	//Aが押された
+	if (!(g_OldKey.Buttons[XINPUT_BUTTON_A]) && g_NowKey.Buttons[XINPUT_BUTTON_A]) {	//Aが押された
 		if (IconY <= 1)PlayerName[Input] = NAME[IconX + (IconY * 13)];				//カーソルが大文字の上なら大文字の入力
 		else if (IconY <= 3)PlayerName[Input] = name[IconX + ((IconY - 2) * 13)];	//　　　　　小文字の上なら小文字の入力
 		else if (IconX <= 9)PlayerName[Input] = number[IconX];						//			数字の上　なら　数字の入力
@@ -511,7 +510,7 @@ void InputRanking(void)
 		}
 
 	}
-	if (g_KeyFlg & PAD_INPUT_B && Input >= 1) {
+	if (!(g_OldKey.Buttons[XINPUT_BUTTON_B]) && g_NowKey.Buttons[XINPUT_BUTTON_B] && Input >= 1) {
 		PlayerName[Input - 1] = NULL;
 		Input--;
 	}
@@ -634,7 +633,7 @@ int LoadImages() {
 
 //ポーズ画面
 void CheckPauseKey(void) {
-	if (g_KeyFlg & PAD_INPUT_8)		//指定キーでflgを1
+	if (!(g_OldKey.Buttons[XINPUT_BUTTON_START]) && g_NowKey.Buttons[XINPUT_BUTTON_START])		//指定キーでflgを1
 	{
 		StopSoundMem(g_MainBGM);  //メインBGMを止める
 		PlaySoundMem(g_PauseSE, DX_PLAYTYPE_BACK, TRUE);  //ポーズSEを再生
@@ -643,15 +642,17 @@ void CheckPauseKey(void) {
 		while (ProcessMessage() == 0 && flg)
 		{
 			g_OldKey = g_NowKey;
-			g_NowKey = GetJoypadInputState(DX_INPUT_KEY_PAD1);
-			g_KeyFlg = g_NowKey & ~g_OldKey;
+			GetJoypadXInputState(DX_INPUT_KEY_PAD1, &g_NowKey);
 
 			SetFontSize(46);
 			DrawString(180, 200, "Xx-PAUSE-xX", GetColor(0, 0, 0), 1);
 
-			if (g_KeyFlg & PAD_INPUT_8) {
+			if (!(g_OldKey.Buttons[XINPUT_BUTTON_START]) && g_NowKey.Buttons[XINPUT_BUTTON_START]) {
 				flg = 0;		//指定キーでFlgを0
 				PlaySoundMem(g_MainBGM, DX_PLAYTYPE_LOOP, FALSE);
+			}
+			if (!(g_OldKey.Buttons[XINPUT_BUTTON_START]) && g_NowKey.Buttons[XINPUT_BUTTON_BACK]) {
+				DxLib_End();
 			}
 
 			ScreenFlip();			//裏画面の内容を表画面に反映
