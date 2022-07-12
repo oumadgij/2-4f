@@ -187,7 +187,7 @@ void DrawGameTitle(void) {
 	DrawGraph(390, 270, g_Menu, TRUE);
 
 	//メニューカーソル
-	DrawRotaGraph(360, 290 + MenuNo * 40, 0.7f, 0, g_Leaf, TRUE);
+	DrawGraph(325, 259 + MenuNo * 40, g_Leaf, TRUE);
 }
 
 //ゲーム初期処理
