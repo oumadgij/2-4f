@@ -239,9 +239,9 @@ void DrawRanking(void) {
 	DrawGraph(0, 0, g_RankingImage, FALSE);
 
 	//ランキング一覧を表示
-	SetFontSize(18);
+	SetFontSize(30);
 	for (int i = 0; i < RANKING_DATA; i++) {
-		DrawFormatString(50, 170 + i * 25, 0xffffff, "%2d %-10s %10d", g_Ranking[i].no, g_Ranking[i].name, g_Ranking[i].score);
+		DrawFormatString(150, 170 + i * 25, 0xffffff, "%2d %-10s %10d", g_Ranking[i].no, g_Ranking[i].name, g_Ranking[i].score);
 	}
 
 	DrawString(100, 450, "---- PRESS B BUTTON TO TITLE ----", 0xffffff, 0);
@@ -251,8 +251,13 @@ void DrawRanking(void) {
 //ゲームヘルプ描画
 void DrawHelp(void) {
 
-	//Bでメニューに戻る
-	if (!(g_OldKey.Buttons[XINPUT_BUTTON_B]) && g_NowKey.Buttons[XINPUT_BUTTON_B]) {
+	
+	if (!(g_OldKey.Buttons[XINPUT_BUTTON_A]) && g_NowKey.Buttons[XINPUT_BUTTON_A]) {
+		//Aでゲームスタート
+		g_GameState = 1;
+	}
+	else if (!(g_OldKey.Buttons[XINPUT_BUTTON_B]) && g_NowKey.Buttons[XINPUT_BUTTON_B]) {
+		//Bでメニューに戻る
 		g_GameState = 0;
 		PlaySoundMem(g_selectSE, DX_PLAYTYPE_BACK, TRUE);
 	}
@@ -260,7 +265,7 @@ void DrawHelp(void) {
 	//タイトル画像表示
 	DrawGraph(0, 0, g_HelpImage, FALSE);
 
-	SetFontSize(16);
+	/*SetFontSize(16);
 	DrawString(20, 120, "- HELP -", 0xffffff, 0);
 
 	DrawString(20, 160, "障害物を避けながら", 0xffffff, 0);
@@ -273,7 +278,7 @@ void DrawHelp(void) {
 	DrawGraph(20, 335, g_Item[1], TRUE);
 	DrawString(20, 385, "耐久を回復できる", 0xffffff, 0);
 	DrawString(20, 405, "無傷なら燃料を少し回復できる", 0xffffff, 0);
-	DrawString(150, 450, "---- PRESS B BUTTON TO TITLE ----", 0xffffff, 0);
+	DrawString(150, 450, "---- PRESS B BUTTON TO TITLE ----", 0xffffff, 0);*/
 
 }
 
@@ -528,7 +533,7 @@ void SortRanking(void)
 	RankingData work;
 
 	// 選択法ソート
-	for (i = 0; i < 9; i++) {
+	for (i = 0; i < 4; i++) {
 		for (j = i + 1; j < RANKING_DATA; j++) {
 			if (g_Ranking[i].score <= g_Ranking[j].score) {
 				work = g_Ranking[i];
@@ -539,13 +544,13 @@ void SortRanking(void)
 	}
 
 	// 順位付け
-	for (i = 0; i < 10; i++) {
+	for (i = 0; i < 5; i++) {
 		g_Ranking[i].no = 1;
 	}
 	// 得点が同じ場合は、同じ順位とする
 	// 同順位があった場合の次の順位はデータ個数が加算された順位とする
-	for (i = 0; i < 9; i++) {
-		for (j = i + 1; j < 10; j++) {
+	for (i = 0; i < 4; i++) {
+		for (j = i + 1; j < 5; j++) {
 			if (g_Ranking[i].score > g_Ranking[j].score) {
 				g_Ranking[j].no++;
 			}
