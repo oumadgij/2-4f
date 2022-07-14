@@ -244,10 +244,10 @@ void DrawRanking(void) {
 	//ランキング一覧を表示
 	SetFontSize(30);
 	for (int i = 0; i < RANKING_DATA; i++) {
-		DrawFormatString(150, 170 + i * 25, 0xffffff, "%2d %-10s %10d", g_Ranking[i].no, g_Ranking[i].name, g_Ranking[i].score);
+		DrawFormatString(105, 150 + i * 50, 0xffffff, "%2d %-10s %10d", g_Ranking[i].no, g_Ranking[i].name, g_Ranking[i].score);
 	}
 
-	DrawString(100, 450, "---- PRESS B BUTTON TO TITLE ----", 0xffffff, 0);
+	DrawString(30, 450, "----Bボタン　で　タイトルにもどる----", 0xffffff, 0);
 
 }
 
@@ -434,7 +434,12 @@ void DrawGameOver(void) {
 		}
 	}
 
-	DrawString(150, 450, "---- PRESS B BUTTON TO TITLE ----", 0xffffff, 0);
+	if (g_Score > g_Ranking[RANKING_DATA - 1].score) {
+		DrawString(100, 450, "----Bボタン　で　ランキング入力へ----", 0xffffff, 0);
+	}
+	else {
+		DrawString(100, 450, "----Bボタン　で　タイトルにもどる----", 0xffffff, 0);
+	}
 }
 
  //ランキング入力処理
@@ -504,14 +509,16 @@ void InputRanking(void)
 	if (!(g_OldKey.Buttons[XINPUT_BUTTON_A]) && g_NowKey.Buttons[XINPUT_BUTTON_A]) {	//Aが押された
 		if (IconY <= 1)PlayerName[Input] = NAME[IconX + (IconY * 13)];				//カーソルが大文字の上なら大文字の入力
 		else if (IconY <= 3)PlayerName[Input] = name[IconX + ((IconY - 2) * 13)];	//　　　　　小文字の上なら小文字の入力
-		else if (IconX <= 9)PlayerName[Input] = number[IconX];						//			数字の上　なら　数字の入力
-		else {																	 //どれでもない（ENDの上）なら　　入力終了
+		else if (IconX <= 9)PlayerName[Input] = number[IconX];						//			　数字の上なら　数字の入力
+		else if (PlayerName[0] != NULL) {			//どれでもない（ENDの上）かつ　1文字以上入力されているなら　　入力終了
 			for (int i = 0; i < 11; i++) {
 				g_Ranking[4].name[i] = PlayerName[i];
 			}
 			g_Ranking[4].score = g_Score;
 			SortRanking();		// ランキング並べ替え
 			SaveRanking();		// ランキングデータの保存
+			IconX = 0;
+			IconY = 0;
 			Input = 0;
 			g_GameState = 2;		// ゲームモードの変更
 		}
@@ -523,8 +530,8 @@ void InputRanking(void)
 	}
 
 	for (int i = 0; i < 10; i++) {
-		DrawFormatString(25 * i + 40, 140, 0xff0000, "%c", PlayerName[i]);
 		DrawBox(25 * i + 40, 175, 25 * i + 60, 180, 0xffffff, TRUE);
+		DrawFormatString(25 * i + 40, 140, 0xff0000, "%c", PlayerName[i]);
 	}
 
 }
