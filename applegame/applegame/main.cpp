@@ -262,7 +262,7 @@ void DrawRanking(void) {
 		DrawFormatString(105, 150 + i * 50, 0xffffff, "%2d %-10s %10d", g_Ranking[i].no, g_Ranking[i].name, g_Ranking[i].score);
 	}
 
-	DrawGraph(185, 435, g_BImage[0], TRUE);
+	DrawGraph(185, 433, g_BImage[0], TRUE);
 
 }
 
@@ -273,7 +273,6 @@ void DrawHelp(void) {
 	if (!(g_OldKey.Buttons[XINPUT_BUTTON_A]) && g_NowKey.Buttons[XINPUT_BUTTON_A]) {
 		//Aでゲームスタート
 		g_GameState = 1;
-
 		PlaySoundMem(g_SelectGameSE, DX_PLAYTYPE_BACK, TRUE);
 	}
 	else if (!(g_OldKey.Buttons[XINPUT_BUTTON_B]) && g_NowKey.Buttons[XINPUT_BUTTON_B]) {
@@ -284,21 +283,6 @@ void DrawHelp(void) {
 
 	//タイトル画像表示
 	DrawGraph(0, 0, g_HelpImage, FALSE);
-
-	/*SetFontSize(16);
-	DrawString(20, 120, "- HELP -", 0xffffff, 0);
-
-	DrawString(20, 160, "障害物を避けながら", 0xffffff, 0);
-	DrawString(20, 180, "走り続けよう", 0xffffff, 0);
-	DrawString(20, 200, "燃料が尽きるか", 0xffffff, 0);
-	DrawString(20, 220, "障害物に数回当たるとゲームオーバー", 0xffffff, 0);
-	DrawString(20, 250, "アイテム一覧", 0xffffff, 0);
-	DrawGraph(20, 260, g_Item[0], TRUE);
-	DrawString(20, 315, "燃料を回復できる", 0xffffff, 0);
-	DrawGraph(20, 335, g_Item[1], TRUE);
-	DrawString(20, 385, "耐久を回復できる", 0xffffff, 0);
-	DrawString(20, 405, "無傷なら燃料を少し回復できる", 0xffffff, 0);
-	DrawString(150, 450, "---- PRESS B BUTTON TO TITLE ----", 0xffffff, 0);*/
 
 }
 
@@ -448,10 +432,10 @@ void DrawGameOver(void) {
 	}
 
 	if (g_Score > g_Ranking[RANKING_DATA - 1].score) {
-		DrawGraph(185, 435, g_BImage[1], TRUE);
+		DrawGraph(185, 433, g_BImage[1], TRUE);
 	}
 	else {
-		DrawGraph(185, 435, g_BImage[0], TRUE);
+		DrawGraph(185, 433, g_BImage[0], TRUE);
 	}
 }
 
