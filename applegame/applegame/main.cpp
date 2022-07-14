@@ -37,6 +37,9 @@ int g_PauseSE;			//ポーズSE
 int g_FallSE;			//リンゴ出現SE
 int g_cursorSE;			//カーソルSE
 int g_selectSE;			//セレクトSE
+int g_SelectGameSE;     //ゲームスタートが押されたときのSE(Titleの[はじめる]・Rankingの[Aボタンで開始])
+int g_deleteSE;         //入力した文字を消す時のSE
+
 
 int FontHandle1;
 int FontHandle2;
@@ -185,9 +188,13 @@ void DrawGameTitle(void) {
 
 	//Zキーでメニュー選択
 	if (!(g_OldKey.Buttons[XINPUT_BUTTON_A]) && g_NowKey.Buttons[XINPUT_BUTTON_A]) {
+		if(MenuNo != 0)  PlaySoundMem(g_selectSE, DX_PLAYTYPE_BACK, TRUE);    //[はじめる]以外でAボタンを押されたとき
+		else {
+			PlaySoundMem(g_SelectGameSE, DX_PLAYTYPE_BACK, TRUE);             //[はじめる]でAボタンを押されたとき
+		}
+
 		g_GameState = MenuNo + 1;
 		MenuNo = 0;
-		PlaySoundMem(g_selectSE, DX_PLAYTYPE_BACK, TRUE);
 	}
 
 	//タイトル画像表示
@@ -266,7 +273,8 @@ void DrawHelp(void) {
 	if (!(g_OldKey.Buttons[XINPUT_BUTTON_A]) && g_NowKey.Buttons[XINPUT_BUTTON_A]) {
 		//Aでゲームスタート
 		g_GameState = 1;
-		PlaySoundMem(g_selectSE, DX_PLAYTYPE_BACK, TRUE);
+
+		PlaySoundMem(g_SelectGameSE, DX_PLAYTYPE_BACK, TRUE);
 	}
 	else if (!(g_OldKey.Buttons[XINPUT_BUTTON_B]) && g_NowKey.Buttons[XINPUT_BUTTON_B]) {
 		//Bでメニューに戻る
@@ -510,8 +518,19 @@ void InputRanking(void)
 		IconY = 4;
 	}
 
+	//カーソルが移動するとSEを流す
+	if ((g_OldKey.ThumbLY >= -hold && g_NowKey.ThumbLY < -hold) || (g_OldKey.ThumbLY <= hold && g_NowKey.ThumbLY > hold) || (g_OldKey.ThumbLX <= hold && g_NowKey.ThumbLX > hold) || (g_OldKey.ThumbLX >= -hold && g_NowKey.ThumbLX < -hold)) {
+		PlaySoundMem(g_cursorSE, DX_PLAYTYPE_BACK, TRUE);
+	}
+
 	//入力
 	if (!(g_OldKey.Buttons[XINPUT_BUTTON_A]) && g_NowKey.Buttons[XINPUT_BUTTON_A]) {	//Aが押された
+
+		if (IconX > 9 && IconY > 3) PlaySoundMem(g_SelectGameSE, DX_PLAYTYPE_BACK, TRUE);       //カーソルが文字・数字の上ならg_SelectGameSEを再生
+		else {																	//		    ENDの上ならg_selectSEを再生
+			PlaySoundMem(g_selectSE, DX_PLAYTYPE_BACK, TRUE);
+		}
+
 		if (IconY <= 1)PlayerName[Input] = NAME[IconX + (IconY * 13)];				//カーソルが大文字の上なら大文字の入力
 		else if (IconY <= 3)PlayerName[Input] = name[IconX + ((IconY - 2) * 13)];	//　　　　　小文字の上なら小文字の入力
 		else if (IconX <= 9)PlayerName[Input] = number[IconX];						//			　数字の上なら　数字の入力
@@ -527,11 +546,12 @@ void InputRanking(void)
 			Input = 0;
 			g_GameState = 2;		// ゲームモードの変更
 		}
-
 	}
 	if (!(g_OldKey.Buttons[XINPUT_BUTTON_B]) && g_NowKey.Buttons[XINPUT_BUTTON_B] && Input >= 1) {
 		PlayerName[Input - 1] = NULL;
 		Input--;
+
+		PlaySoundMem(g_deleteSE, DX_PLAYTYPE_BACK, TRUE);
 	}
 
 	for (int i = 0; i < 10; i++) {
@@ -696,21 +716,27 @@ int LoadSounds()
 
 	//A～Cのリンゴ取得時のSE
 	if ((g_CatchSE = LoadSoundMem("sounds/catchSE.wav")) == -1) return-1;
-
 	//Dのリンゴ取得時のSE
 	if ((g_PoisonSE = LoadSoundMem("sounds/poisonSE.wav")) == -1) return -1;
 
-	//ポーズ画面に移行した時のSE
-	if ((g_PauseSE = LoadSoundMem("sounds/PoseSE.wav")) == -1) return -1;
-
 	//リンゴ出現時のSE
 	if ((g_FallSE = LoadSoundMem("sounds/FallSE.wav")) == -1)return -1;
+
+	//ポーズ画面に移行した時のSE
+	if ((g_PauseSE = LoadSoundMem("sounds/PoseSE.wav")) == -1) return -1;
 
 	//カーソル移動SE
 	if ((g_cursorSE = LoadSoundMem("sounds/cursorSE.wav")) == -1)return -1;
 
 	//決定時のSE
 	if ((g_selectSE = LoadSoundMem("sounds/selectSE.wav")) == -1)return -1;
+
+	//ゲームスタートが押された時のSE
+	if ((g_SelectGameSE = LoadSoundMem("sounds/SelectGameSE.wav")) == -1) return -1;
+
+	//入力した文字を削除する時のSE
+	if ((g_deleteSE = LoadSoundMem("sounds/deleteSE.wav")) == -1) return -1;
+
 
 	//音量調整
 	ChangeVolumeSoundMem(250, g_cursorSE);   //カーソル移動SE
