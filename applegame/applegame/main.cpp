@@ -158,7 +158,10 @@ void DrawGameTitle(void) {
 	static int MenuNo = 0;
 
 	//タイトルBGMの再生
-	PlaySoundMem(g_TitleBGM, DX_PLAYTYPE_LOOP, FALSE);
+	if (CheckSoundMem(g_TitleBGM) == 0)
+	{
+		PlaySoundMem(g_TitleBGM, DX_PLAYTYPE_BACK);
+	}
 
 	if (MenuNo > 3 || MenuNo < 0) MenuNo = 0;
 
@@ -662,6 +665,7 @@ void CheckPauseKey(void) {
 
 			if (!(g_OldKey.Buttons[XINPUT_BUTTON_START]) && g_NowKey.Buttons[XINPUT_BUTTON_START]) {
 				flg = 0;		//指定キーでFlgを0
+				PlaySoundMem(g_PauseSE, DX_PLAYTYPE_BACK, TRUE);  //ポーズSEを再生
 				PlaySoundMem(g_MainBGM, DX_PLAYTYPE_LOOP, FALSE);
 			}
 			if (!(g_OldKey.Buttons[XINPUT_BUTTON_START]) && g_NowKey.Buttons[XINPUT_BUTTON_BACK]) {
