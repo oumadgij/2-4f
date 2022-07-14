@@ -27,6 +27,7 @@ int g_Teki[4];			//敵画像変数
 int g_StageImage;		//ステージ画像変数
 int g_PlayerImage[2];	//キャラ画像
 int g_HelpImage;
+int g_BImage[2];
 
 int g_TitleBGM;         //タイトルBGM
 int g_MainBGM;          //ゲームメインBGM
@@ -78,6 +79,7 @@ int LoadImages();			//画像読み込み
 int LoadSounds();			//音源読み込み
 
 void CheckPauseKey();	//ポーズ画面
+
 //プログラムの開始
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	LPSTR lpCmdLine, int nCmdShow) {
@@ -247,7 +249,7 @@ void DrawRanking(void) {
 		DrawFormatString(105, 150 + i * 50, 0xffffff, "%2d %-10s %10d", g_Ranking[i].no, g_Ranking[i].name, g_Ranking[i].score);
 	}
 
-	DrawString(30, 450, "----Bボタン　で　タイトルにもどる----", 0xffffff, 0);
+	DrawGraph(185, 435, g_BImage[0], TRUE);
 
 }
 
@@ -435,10 +437,10 @@ void DrawGameOver(void) {
 	}
 
 	if (g_Score > g_Ranking[RANKING_DATA - 1].score) {
-		DrawString(100, 450, "----Bボタン　で　ランキング入力へ----", 0xffffff, 0);
+		DrawGraph(185, 435, g_BImage[1], TRUE);
 	}
 	else {
-		DrawString(100, 450, "----Bボタン　で　タイトルにもどる----", 0xffffff, 0);
+		DrawGraph(185, 435, g_BImage[0], TRUE);
 	}
 }
 
@@ -636,11 +638,14 @@ int LoadImages() {
 	if ((g_PlayerImage[0] = LoadGraph("images/player0.png")) == -1)return -1;
 	if ((g_PlayerImage[1] = LoadGraph("images/player1.png")) == -1)return -1;
 
-	//敵
+	//りんご
 	if (LoadDivGraph("images/apple.png", 4, 4, 1, 40, 40, g_Teki) == -1)return -1;
 
 	//help
 	if ((g_HelpImage = LoadGraph("images/help.png")) == -1)return -1;
+	if ((g_BImage[0] = LoadGraph("images/BbuttonTitle.png")) == -1)return -1;
+	if ((g_BImage[1] = LoadGraph("images/BbuttonRank.png")) == -1)return -1;
+
 	//エンディング
 	if ((g_EndImage = LoadGraph("images/end.png")) == -1)return -1;
 
@@ -661,7 +666,7 @@ void CheckPauseKey(void) {
 			GetJoypadXInputState(DX_INPUT_KEY_PAD1, &g_NowKey);
 
 			SetFontSize(46);
-			DrawString(180, 200, "Xx-PAUSE-xX", GetColor(0, 0, 0), 1);
+			DrawString(136, 217, "Xx-ポーズ中-xX", GetColor(0, 0, 0), 1);
 
 			if (!(g_OldKey.Buttons[XINPUT_BUTTON_START]) && g_NowKey.Buttons[XINPUT_BUTTON_START]) {
 				flg = 0;		//指定キーでFlgを0

@@ -22,10 +22,10 @@ void Apple::Spawn(int x) {
 	flg = TRUE;	//使用フラグ
 	SelectApple();
 	img = g_Teki[type];	//画像
-	this->x = x * 62 + 62;	//座標xy 幅w 高さh
 	y = -50;
 	w = 40;
 	h = 40;
+	this->x = x * 62 + 62 - (w / 2);	//座標xy 幅w 高さh
 }
 
 void Apple::SelectApple(void) {
