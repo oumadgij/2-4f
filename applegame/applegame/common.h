@@ -23,7 +23,9 @@ extern XINPUT_STATE g_NowKey;			//今回の入力キー
 extern int g_Score;			//スコア
 extern int g_AppleCount[3];		//敵カウント
 
-extern int FontHandle;
+extern int FontHandle1;
+extern int FontHandle2;
+extern int FontHandle3;
 
 extern int g_MainBGM;          //ゲームメインBGM
 extern int g_CatchSE;			//A,B,Cのリンゴ取得時のSE
