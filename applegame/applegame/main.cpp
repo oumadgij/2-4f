@@ -26,8 +26,10 @@ int g_EndImage;			//エンド画面用変数
 int g_Teki[4];			//敵画像変数
 int g_StageImage;		//ステージ画像変数
 int g_PlayerImage[2];	//キャラ画像
+int g_PauseImage;		//ポーズ画像
+int g_TimeupImage;		
 int g_HelpImage;
-int g_BImage[2];
+int g_BImage[3];
 
 int g_TitleBGM;         //タイトルBGM
 int g_MainBGM;          //ゲームメインBGM
@@ -44,6 +46,7 @@ int g_deleteSE;         //入力した文字を消す時のSE
 int FontHandle1;
 int FontHandle2;
 int FontHandle3;
+int FontHandle4;
 
 double NextTime;		//フレーム毎の経過時間
 
@@ -106,6 +109,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	FontHandle1 = CreateFontToHandle("HGS創英角ﾎﾟｯﾌﾟ体", 55, 3, DX_FONTTYPE_NORMAL);
 	FontHandle2 = CreateFontToHandle("HGS創英角ﾎﾟｯﾌﾟ体", 27, 3, DX_FONTTYPE_NORMAL);
 	FontHandle3 = CreateFontToHandle("HGS創英角ﾎﾟｯﾌﾟ体", 20, 3, DX_FONTTYPE_NORMAL);
+	FontHandle4 = CreateFontToHandle("HGS創英角ﾎﾟｯﾌﾟ体", 36, 3, DX_FONTTYPE_NORMAL);
 
 	while (ProcessMessage() == 0 && g_GameState != 99 && !(g_NowKey.Buttons[XINPUT_BUTTON_BACK])) {
 	
@@ -157,6 +161,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	DeleteFontToHandle(FontHandle1);
 	DeleteFontToHandle(FontHandle2);
 	DeleteFontToHandle(FontHandle3);
+	DeleteFontToHandle(FontHandle4);
 
 	DxLib_End();				//DXライブラリ仕様の終了処理
 
@@ -257,12 +262,12 @@ void DrawRanking(void) {
 	DrawGraph(0, 0, g_RankingImage, FALSE);
 
 	//ランキング一覧を表示
-	SetFontSize(30);
+	/*SetFontSize(30);*/
 	for (int i = 0; i < RANKING_DATA; i++) {
-		DrawFormatString(105, 150 + i * 50, 0xffffff, "%2d %-10s %10d", g_Ranking[i].no, g_Ranking[i].name, g_Ranking[i].score);
+		DrawFormatStringToHandle(105, 150 + i * 50, 0x000000, FontHandle4, "%2d %-10s %10d", g_Ranking[i].no, g_Ranking[i].name, g_Ranking[i].score);
 	}
 
-	DrawGraph(185, 433, g_BImage[0], TRUE);
+	DrawGraph(185, 418, g_BImage[0], TRUE);
 
 }
 
@@ -315,8 +320,8 @@ void GameMain(void) {
 			for (int j = i; j < APPLE_MAX; j++) {			
 				if (apple[j].flg == FALSE) {			//apple[j]のりんごが出現中か(フラグがTRUEか)
 					apple[j].Spawn(SpawnAppleX());		//非出現(フラグがFALSE)ならX座標を決定しリンゴを出現させる
-					break;						//ループを抜ける
 					PlaySoundMem(g_FallSE, DX_PLAYTYPE_BACK, TRUE);
+					break;						//ループを抜ける
 				}
 			}
 		}
@@ -431,11 +436,13 @@ void DrawGameOver(void) {
 		}
 	}
 
+	DrawGraph(0, 0, g_TimeupImage, TRUE);
+
 	if (g_Score > g_Ranking[RANKING_DATA - 1].score) {
-		DrawGraph(185, 433, g_BImage[1], TRUE);
+		DrawGraph(230, 433, g_BImage[1], TRUE);
 	}
 	else {
-		DrawGraph(185, 433, g_BImage[0], TRUE);
+		DrawGraph(230, 433, g_BImage[0], TRUE);
 	}
 }
 
@@ -461,18 +468,18 @@ void InputRanking(void)
 	//ランキング画像表示
 	DrawGraph(0, 0, g_RankingImage, FALSE);
 
-	// フォントサイズの設定
-	SetFontSize(40);
-
+	//ボタン操作説明画像表示
+	DrawGraph(0, 415, g_BImage[2], TRUE);
+	
 	// 名前入力指示文字列の描画
 	for (int i = 0; i < 13; i++) {
-		DrawFormatString(45 * i + 40, 200, 0x000000, "%c", NAME[i]);
-		DrawFormatString(45 * i + 40, 250, 0x000000, "%c", NAME[i + 13]);
-		DrawFormatString(45 * i + 40, 300, 0x000000, "%c", name[i]);
-		DrawFormatString(45 * i + 40, 350, 0x000000, "%c", name[i + 13]);
-		if (i < 10)DrawFormatString((45 * i) + 40, 400, 0x000000, "%c", number[i]);
+		DrawFormatStringToHandle(45 * i + 40, 195, 0x000000, FontHandle4, "%c", NAME[i]);
+		DrawFormatStringToHandle(45 * i + 40, 235, 0x000000, FontHandle4, "%c", NAME[i + 13]);
+		DrawFormatStringToHandle(45 * i + 40, 275, 0x000000, FontHandle4, "%c", name[i]);
+		DrawFormatStringToHandle(45 * i + 40, 315, 0x000000, FontHandle4, "%c", name[i + 13]);
+		if (i < 10)DrawFormatStringToHandle((45 * i) + 40, 355, 0x000000, FontHandle4, "%c", number[i]);
 	}
-	DrawString(45 * 11 + 40, 400, "END", 0x000000);
+	DrawFormatStringToHandle(45 * 11 + 40, 355, 0x000000, FontHandle4, "END");
 
 	//カーソル描画
 	if (IconX > 9 && IconY > 3) {	//カーソルがENDに移動した?
@@ -539,8 +546,8 @@ void InputRanking(void)
 	}
 
 	for (int i = 0; i < 10; i++) {
-		DrawBox(25 * i + 40, 175, 25 * i + 60, 180, 0xffffff, TRUE);
-		DrawFormatString(25 * i + 40, 140, 0xff0000, "%c", PlayerName[i]);
+		DrawBox(25 * i + 40, 165, 25 * i + 60, 170, 0xffffff, TRUE);
+		DrawFormatStringToHandle(25 * i + 40, 130, 0xff0000, FontHandle4, "%c", PlayerName[i]);
 	}
 
 }
@@ -648,10 +655,17 @@ int LoadImages() {
 	//りんご
 	if (LoadDivGraph("images/apple.png", 4, 4, 1, 40, 40, g_Teki) == -1)return -1;
 
+	//ポーズ
+	if ((g_PauseImage = LoadGraph("images/pause.png")) == -1)return -1;
+
+	//時間切れ
+	if ((g_TimeupImage = LoadGraph("images/timeup.png")) == -1)return -1;
+
 	//help
 	if ((g_HelpImage = LoadGraph("images/help.png")) == -1)return -1;
 	if ((g_BImage[0] = LoadGraph("images/BbuttonTitle.png")) == -1)return -1;
 	if ((g_BImage[1] = LoadGraph("images/BbuttonRank.png")) == -1)return -1;
+	if ((g_BImage[2] = LoadGraph("images/Rankingbutton.png")) == -1)return -1;
 
 	//エンディング
 	if ((g_EndImage = LoadGraph("images/end.png")) == -1)return -1;
@@ -672,8 +686,7 @@ void CheckPauseKey(void) {
 			g_OldKey = g_NowKey;
 			GetJoypadXInputState(DX_INPUT_KEY_PAD1, &g_NowKey);
 
-			SetFontSize(46);
-			DrawString(136, 217, "Xx-ポーズ中-xX", GetColor(0, 0, 0), 1);
+			DrawGraph(0, 0, g_PauseImage, TRUE);
 
 			if (!(g_OldKey.Buttons[XINPUT_BUTTON_START]) && g_NowKey.Buttons[XINPUT_BUTTON_START]) {
 				flg = 0;		//指定キーでFlgを0
@@ -725,6 +738,7 @@ int LoadSounds()
 	//音量調整
 	ChangeVolumeSoundMem(250, g_cursorSE);   //カーソル移動SE
 	ChangeVolumeSoundMem(400, g_PoisonSE);   //リンゴD取得時のSE
+	ChangeVolumeSoundMem(170, g_FallSE);	 //リンゴ落下SE
 
 	return 0;
 }

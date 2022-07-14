@@ -27,6 +27,5 @@ extern int FontHandle1;
 extern int FontHandle2;
 extern int FontHandle3;
 
-extern int g_MainBGM;          //ƒQ[ƒ€ƒƒCƒ“BGM
 extern int g_CatchSE;			//A,B,C‚ÌƒŠƒ“ƒSæ“¾‚ÌSE
 extern int g_PoisonSE;			//D‚ÌƒŠƒ“ƒSæ“¾‚ÌSE
