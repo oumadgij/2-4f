@@ -260,7 +260,7 @@ void DrawRanking(void) {
 
 	//ランキング画面表示
 	DrawGraph(0, 0, g_RankingImage, FALSE);
-	DrawGraph(120, 120, g_KanbanImage, TRUE);
+	//DrawGraph(120, 120, g_KanbanImage, TRUE);
 
 	//ランキング一覧を表示
 	/*SetFontSize(30);*/
