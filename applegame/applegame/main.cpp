@@ -27,7 +27,8 @@ int g_Teki[4];			//敵画像変数
 int g_StageImage;		//ステージ画像変数
 int g_PlayerImage[2];	//キャラ画像
 int g_PauseImage;		//ポーズ画像
-int g_TimeupImage;		
+int g_TimeupImage;	
+int g_KanbanImage;
 int g_HelpImage;
 int g_BImage[3];
 
@@ -259,13 +260,14 @@ void DrawRanking(void) {
 
 	//ランキング画面表示
 	DrawGraph(0, 0, g_RankingImage, FALSE);
+	DrawGraph(120, 120, g_KanbanImage, TRUE);
 
 	//ランキング一覧を表示
 	/*SetFontSize(30);*/
 	for (int i = 0; i < RANKING_DATA; i++) {
-		DrawFormatStringToHandle(90, 150 + i * 50, 0x000000, FontHandle4, "%2d", g_Ranking[i].no);
-		DrawFormatStringToHandle(90 + 36 * 2, 150 + i * 50, 0x000000, FontHandle4, "%-10s", g_Ranking[i].name);
-		DrawFormatStringToHandle(90 + 36 * 3 + 180, 150 + i * 50, 0x000000, FontHandle4, "%10d", g_Ranking[i].score);
+		DrawFormatStringToHandle(90, 150 + i * 50, 0xffffff, FontHandle4, "%2d", g_Ranking[i].no);
+		DrawFormatStringToHandle(90 + 36 * 2, 150 + i * 50, 0xffffff, FontHandle4, "%-10s", g_Ranking[i].name);
+		DrawFormatStringToHandle(90 + 36 * 3 + 180, 150 + i * 50, 0xffffff, FontHandle4, "%10d", g_Ranking[i].score);
 	}
 
 	DrawGraph(185, 418, g_BImage[0], TRUE);
@@ -663,6 +665,9 @@ int LoadImages() {
 
 	//時間切れ
 	if ((g_TimeupImage = LoadGraph("images/timeup.png")) == -1)return -1;
+
+	//ランキング用看板
+	if ((g_KanbanImage = LoadGraph("images/kanban.png")) == -1)return -1;
 
 	//help
 	if ((g_HelpImage = LoadGraph("images/help.png")) == -1)return -1;
