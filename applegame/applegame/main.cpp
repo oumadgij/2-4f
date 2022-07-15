@@ -239,8 +239,8 @@ void GameInit(void) {
 	}
 	PlayerName[10] = '\0';
 
-	//現在経過時間を得る
-	g_TimeLimit = 60 * 31;
+	//制限時間をセット
+	g_TimeLimit = 60 * (TIMELIMIT + 1);
 
 	//ゲームメイン処理へ
 	g_GameState = 5;
@@ -264,7 +264,9 @@ void DrawRanking(void) {
 	//ランキング一覧を表示
 	/*SetFontSize(30);*/
 	for (int i = 0; i < RANKING_DATA; i++) {
-		DrawFormatStringToHandle(105, 150 + i * 50, 0x000000, FontHandle4, "%2d %-10s %10d", g_Ranking[i].no, g_Ranking[i].name, g_Ranking[i].score);
+		DrawFormatStringToHandle(105, 150 + i * 50, 0x000000, FontHandle4, "%2d", g_Ranking[i].no);
+		DrawFormatStringToHandle(105 + 36 * 2, 150 + i * 50, 0x000000, FontHandle4, "%-10s", g_Ranking[i].name);
+		DrawFormatStringToHandle(105 + 36 * 3 + 180, 150 + i * 50, 0x000000, FontHandle4, "%10d", g_Ranking[i].score);
 	}
 
 	DrawGraph(185, 418, g_BImage[0], TRUE);
@@ -418,9 +420,10 @@ void BackScrool() {
 //	}
 //	return FALSE;
 //}
-// 
-//ゲームオーバー画面描画
+//
 
+
+//ゲームオーバー画面描画
 void DrawGameOver(void) {
 
 	BackScrool();
@@ -439,10 +442,10 @@ void DrawGameOver(void) {
 	DrawGraph(0, 0, g_TimeupImage, TRUE);
 
 	if (g_Score > g_Ranking[RANKING_DATA - 1].score) {
-		DrawGraph(230, 433, g_BImage[1], TRUE);
+		DrawGraph(115, 433, g_BImage[1], TRUE);
 	}
 	else {
-		DrawGraph(230, 433, g_BImage[0], TRUE);
+		DrawGraph(115, 433, g_BImage[0], TRUE);
 	}
 }
 
@@ -483,14 +486,14 @@ void InputRanking(void)
 
 	//カーソル描画
 	if (IconX > 9 && IconY > 3) {	//カーソルがENDに移動した?
-		DrawBox(45 * 11 + 40 - 10, 50 * 4 + 200 - 5, 45 * 12 + 40 + 30, 50 * 4 + 205 + 35, 0x00ffff, FALSE);	//したならカーソルをENDの上に
+		DrawBox(45 * 11 + 40 - 10, 40 * 4 + 195 - 5, 45 * 12 + 40 + 30, 40 * 4 + 200 + 36, 0x00ffff, FALSE);	//したならカーソルをENDの上に
 		if (g_OldKey.ThumbLY >= -hold && g_NowKey.ThumbLY < -hold)	IconY = 0;
 		if (g_OldKey.ThumbLY <= hold && g_NowKey.ThumbLY > hold)	IconY = 3;
 		if (g_OldKey.ThumbLX >= -hold && g_NowKey.ThumbLX < -hold)	IconX = 9;
 		if (g_OldKey.ThumbLX <= hold && g_NowKey.ThumbLX > hold)	IconX = 0;
 	}
 	else {																										//してなければ文字の上に
-		DrawBox(45 * IconX + 40 - 10, 50 * IconY + 200 - 5, 45 * IconX + 40 + 30, 50 * IconY + 205 + 35, 0x00ffff, FALSE);
+		DrawBox(45 * IconX + 40 - 5, 40 * IconY + 195 - 5, 45 * IconX + 40 + 31, 40 * IconY + 200 + 36, 0x00ffff, FALSE);
 		if (g_OldKey.ThumbLY >= -hold && g_NowKey.ThumbLY < -hold) {
 			if (++IconY > 4)IconY = 0;
 		}
