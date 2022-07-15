@@ -263,9 +263,9 @@ void DrawRanking(void) {
 	//ランキング一覧を表示
 	/*SetFontSize(30);*/
 	for (int i = 0; i < RANKING_DATA; i++) {
-		DrawFormatStringToHandle(105, 150 + i * 50, 0x000000, FontHandle4, "%2d", g_Ranking[i].no);
-		DrawFormatStringToHandle(105 + 36 * 2, 150 + i * 50, 0x000000, FontHandle4, "%-10s", g_Ranking[i].name);
-		DrawFormatStringToHandle(105 + 36 * 3 + 180, 150 + i * 50, 0x000000, FontHandle4, "%10d", g_Ranking[i].score);
+		DrawFormatStringToHandle(90, 150 + i * 50, 0x000000, FontHandle4, "%2d", g_Ranking[i].no);
+		DrawFormatStringToHandle(90 + 36 * 2, 150 + i * 50, 0x000000, FontHandle4, "%-10s", g_Ranking[i].name);
+		DrawFormatStringToHandle(90 + 36 * 3 + 180, 150 + i * 50, 0x000000, FontHandle4, "%10d", g_Ranking[i].score);
 	}
 
 	DrawGraph(185, 418, g_BImage[0], TRUE);
@@ -381,15 +381,15 @@ void BackScrool() {
 	//スコア等表示領域
 	DrawBox(500, 0, 640, 480, 0x009900, TRUE);
 
-	DrawFormatStringToHandle(511, 40, 0x000000,FontHandle3, "のこりじかん");
+	DrawFormatStringToHandle(511, 40, 0xfdeca6,FontHandle3, "のこりじかん");
 	DrawFormatStringToHandle(535, 70, 0xffffff, FontHandle1, "%02d", g_TimeLimit / 60); //制限時間の描画
 
 	//スコアの描画
-	DrawFormatStringToHandle(533, 170, 0x000000, FontHandle3, "てんすう");
+	DrawFormatStringToHandle(533, 170, 0xfdeca6, FontHandle3, "てんすう");
 	DrawFormatStringToHandle(518, 200, 0xFFFFFF, FontHandle2, "%06d", g_Score);
 
 	//獲得したりんごの個数を描画
-	DrawFormatStringToHandle(520, 275, 0x000000, FontHandle3, "とったかず");
+	DrawFormatStringToHandle(520, 275, 0xfdeca6, FontHandle3, "とったかず");
 	DrawRotaGraph(535, 325, 0.9f, 0, g_Teki[2], TRUE, FALSE);
 	DrawRotaGraph(535, 375, 0.9f, 0, g_Teki[1], TRUE, FALSE);
 	DrawRotaGraph(535, 425, 0.9f, 0, g_Teki[0], TRUE, FALSE);
@@ -440,10 +440,10 @@ void DrawGameOver(void) {
 	DrawGraph(0, 0, g_TimeupImage, TRUE);
 
 	if (g_Score > g_Ranking[RANKING_DATA - 1].score) {
-		DrawGraph(115, 433, g_BImage[1], TRUE);
+		DrawGraph(115, 418, g_BImage[1], TRUE);
 	}
 	else {
-		DrawGraph(115, 433, g_BImage[0], TRUE);
+		DrawGraph(115, 418, g_BImage[0], TRUE);
 	}
 }
 
