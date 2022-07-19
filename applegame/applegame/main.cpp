@@ -109,7 +109,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	if (ReadRanking() == -1)return -1;
 
 	FontHandle1 = CreateFontToHandle("HGS創英角ﾎﾟｯﾌﾟ体", 55, 3, DX_FONTTYPE_NORMAL);
-	FontHandle2 = CreateFontToHandle("HGS創英角ﾎﾟｯﾌﾟ体", 27, 3, DX_FONTTYPE_NORMAL);
+	FontHandle2 = CreateFontToHandle("HGS創英角ﾎﾟｯﾌﾟ体", 32, 3, DX_FONTTYPE_NORMAL);
 	FontHandle3 = CreateFontToHandle("HGS創英角ﾎﾟｯﾌﾟ体", 20, 3, DX_FONTTYPE_NORMAL);
 	FontHandle4 = CreateFontToHandle("HGS創英角ﾎﾟｯﾌﾟ体", 36, 3, DX_FONTTYPE_NORMAL);
 
@@ -388,7 +388,7 @@ void BackScrool() {
 
 	//スコアの描画
 	DrawFormatStringToHandle(533, 170, 0xfdeca6, FontHandle3, "てんすう");
-	DrawFormatStringToHandle(518, 200, 0xFFFFFF, FontHandle2, "%06d", g_Score);
+	DrawFormatStringToHandle(508, 200, 0xFFFFFF, FontHandle2, "%06d", g_Score);
 
 	//獲得したりんごの個数を描画
 	DrawFormatStringToHandle(520, 275, 0xfdeca6, FontHandle3, "とったかず");
