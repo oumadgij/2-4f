@@ -1,2 +1,6 @@
-﻿  main.cpp
-  applegame.vcxproj -> C:\Summer Production\2-4f\applegame\x64\Debug\applegame.exe
+﻿  Player.cpp
+C:\pg\2-4f\applegame\applegame\Player.cpp(1,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
+C:\pg\2-4f\applegame\applegame\Player.cpp(13,2): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'Angle' の左辺を無視します。
+C:\pg\2-4f\applegame\applegame\Player.cpp(82,52): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+C:\pg\2-4f\applegame\applegame\Player.cpp(118,13): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+  applegame.vcxproj -> C:\pg\2-4f\applegame\x64\Debug\applegame.exe

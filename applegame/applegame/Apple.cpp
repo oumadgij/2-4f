@@ -91,7 +91,6 @@ void Apple::AppleCount() {
 		g_Score = 0;
 	}
 	flg = FALSE;
-	
 }
 
 int Apple::GetType() {
@@ -108,4 +107,7 @@ int Apple::GetWidth() {
 }
 int Apple::GetHeight() {
 	return h;
+}
+int Apple::GetScore() {
+	return point;
 }
