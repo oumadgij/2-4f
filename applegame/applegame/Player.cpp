@@ -65,6 +65,9 @@ void Player::PlayerControl() {
 
 	x += speed;
 
+	//画面の両端に行ったときに慣性が働き続けないようにする
+	if (x < 0 || x > SCREEN_WIDTH - (140 + w))speed = 0;
+
 	//画像幅と高さの更新
 	if (hold > g_NowKey.ThumbLX && g_NowKey.ThumbLX > -hold) {
 		w = 40;
@@ -78,7 +81,6 @@ void Player::PlayerControl() {
 
 	//画面から出ないようにする
 	if (x < 0)x = 0;
-
 	if (x > SCREEN_WIDTH - (140 + w))x = SCREEN_WIDTH - (140 + w);
 
 	//プレイヤーの表示
