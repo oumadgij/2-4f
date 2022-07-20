@@ -15,13 +15,14 @@ public:
 	void Spawn(int x);			//リンゴ出現 x=出現するX座標の相対的な位置
 	void SelectApple(void);		//リンゴの種類決定
 	void EnemyControl();	//敵機処理
+	void AppleCount();
 
 	int GetType(void);	//タイプ取得
 	int GetX(void);
 	int GetY(void);	//	画像サイズ取得
 	int GetWidth(void);
 	int GetHeight(void);	//	画像サイズ取得
-	void AppleCount();
+	int GetScore(void);		//スコア取得
 };
 
 extern Apple apple[APPLE_MAX];
