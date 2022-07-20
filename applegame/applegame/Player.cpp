@@ -22,6 +22,7 @@ Player::Player() {
 	y = SCREEN_HEIGHT - h;
 	angle = 0;
 	RestD = 0;
+	drawtime = 0;
 	speed = 0.0f;
 	kansei = 0.1f;
 }
