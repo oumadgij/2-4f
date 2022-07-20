@@ -30,7 +30,7 @@ int g_PauseImage;		//ポーズ画像
 int g_TimeupImage;	
 int g_KanbanImage;
 int g_HelpImage;
-int g_BImage[3];
+int g_BImage[4];
 
 int g_TitleBGM;         //タイトルBGM
 int g_MainBGM;          //ゲームメインBGM
@@ -262,12 +262,16 @@ void DrawRanking(void) {
 	DrawGraph(0, 0, g_RankingImage, FALSE);
 	//DrawGraph(120, 120, g_KanbanImage, TRUE);
 
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);			//描画の透明度を半透明に(0～255)
+	DrawBox(70, 135, 570, 400, GetColor(255, 255, 255), 1);		//ランキング背面に透明な白のボックスを描画
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);			//描画の透明度を戻す
+
 	//ランキング一覧を表示
 	/*SetFontSize(30);*/
 	for (int i = 0; i < RANKING_DATA; i++) {
-		DrawFormatStringToHandle(90, 150 + i * 50, 0xffffff, FontHandle4, "%2d", g_Ranking[i].no);
-		DrawFormatStringToHandle(90 + 36 * 2, 150 + i * 50, 0xffffff, FontHandle4, "%-10s", g_Ranking[i].name);
-		DrawFormatStringToHandle(90 + 36 * 3 + 180, 150 + i * 50, 0xffffff, FontHandle4, "%10d", g_Ranking[i].score);
+		DrawFormatStringToHandle(90, 150 + i * 50, 0x000000, FontHandle4, "%2d", g_Ranking[i].no);
+		DrawFormatStringToHandle(90 + 36 * 2, 150 + i * 50, 0x000000, FontHandle4, "%-10s", g_Ranking[i].name);
+		DrawFormatStringToHandle(90 + 36 * 3 + 180, 150 + i * 50, 0x000000, FontHandle4, "%10d", g_Ranking[i].score);
 	}
 
 	DrawGraph(185, 418, g_BImage[0], TRUE);
@@ -288,9 +292,9 @@ void DrawHelp(void) {
 		PlaySoundMem(g_selectSE, DX_PLAYTYPE_BACK, TRUE);
 	}
 
-	//タイトル画像表示
+	//ヘルプ画像表示
 	DrawGraph(0, 0, g_HelpImage, FALSE);
-
+	DrawGraph(0, 418, g_BImage[3], TRUE);
 }
 
 //ゲームエンド描画
@@ -468,21 +472,25 @@ void InputRanking(void)
 	//ランキング画像表示
 	DrawGraph(0, 0, g_RankingImage, FALSE);
 
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);			//描画の透明度を半透明に(0～255)
+	DrawBox(30, 120, 610, 410, GetColor(255, 255, 255), 1);		//ランキング背面に透明な白のボックスを描画
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);			//描画の透明度を戻す
+
 	//ボタン操作説明画像表示
 	DrawGraph(0, 415, g_BImage[2], TRUE);
 
 	//カーソル描画
 	if (IconX > 9 && IconY > 3) {	//カーソルがENDに移動した?
-		DrawBox(45 * 11 + 40 - 10, 45 * 4 + 195 - 5, 45 * 12 + 40 + 30, 45 * 4 + 200 + 36, 0x00ffff, TRUE);	//したならカーソルをENDの上に
-		DrawBox(45 * 11 + 40 - 10, 45 * 4 + 195 - 5, 45 * 12 + 40 + 30, 45 * 4 + 200 + 36, 0xff0000, FALSE);
+		DrawBox(45 * 11 + 40 - 10, 45 * 4 + 185 - 5, 45 * 12 + 40 + 30, 45 * 4 + 190 + 36, 0x00ffff, TRUE);	//したならカーソルをENDの上に
+		DrawBox(45 * 11 + 40 - 10, 45 * 4 + 185 - 5, 45 * 12 + 40 + 30, 45 * 4 + 190 + 36, 0xff0000, FALSE);
 		if (g_OldKey.ThumbLY >= -hold && g_NowKey.ThumbLY < -hold)	IconY = 0;
 		if (g_OldKey.ThumbLY <= hold && g_NowKey.ThumbLY > hold)	IconY = 3;
 		if (g_OldKey.ThumbLX >= -hold && g_NowKey.ThumbLX < -hold)	IconX = 9;
 		if (g_OldKey.ThumbLX <= hold && g_NowKey.ThumbLX > hold)	IconX = 0;
 	}
 	else {																										//してなければ文字の上に
-		DrawBox(45 * IconX + 40 - 5, 45 * IconY + 195 - 5, 45 * IconX + 40 + 31, 45 * IconY + 200 + 36, 0x00ffff, TRUE);
-		DrawBox(45 * IconX + 40 - 5, 45 * IconY + 195 - 5, 45 * IconX + 40 + 31, 45 * IconY + 200 + 36, 0xff0000, FALSE);
+		DrawBox(45 * IconX + 40 - 5, 45 * IconY + 185 - 5, 45 * IconX + 40 + 31, 45 * IconY + 190 + 36, 0x00ffff, TRUE);
+		DrawBox(45 * IconX + 40 - 5, 45 * IconY + 185 - 5, 45 * IconX + 40 + 31, 45 * IconY + 190 + 36, 0xff0000, FALSE);
 		if (g_OldKey.ThumbLY >= -hold && g_NowKey.ThumbLY < -hold) {
 			if (++IconY > 4)IconY = 0;
 		}
@@ -503,13 +511,13 @@ void InputRanking(void)
 
 	// 名前入力指示文字列の描画
 	for (int i = 0; i < 13; i++) {
-		DrawFormatStringToHandle(45 * i + 40, 195, 0x000000, FontHandle4, "%c", NAME[i]);
-		DrawFormatStringToHandle(45 * i + 40, 240, 0x000000, FontHandle4, "%c", NAME[i + 13]);
-		DrawFormatStringToHandle(45 * i + 40, 285, 0x000000, FontHandle4, "%c", name[i]);
-		DrawFormatStringToHandle(45 * i + 40, 330, 0x000000, FontHandle4, "%c", name[i + 13]);
-		if (i < 10)DrawFormatStringToHandle((45 * i) + 40, 375, 0x000000, FontHandle4, "%c", number[i]);
+		DrawFormatStringToHandle(45 * i + 40, 185, 0x000000, FontHandle4, "%c", NAME[i]);
+		DrawFormatStringToHandle(45 * i + 40, 230, 0x000000, FontHandle4, "%c", NAME[i + 13]);
+		DrawFormatStringToHandle(45 * i + 40, 275, 0x000000, FontHandle4, "%c", name[i]);
+		DrawFormatStringToHandle(45 * i + 40, 320, 0x000000, FontHandle4, "%c", name[i + 13]);
+		if (i < 10)DrawFormatStringToHandle((45 * i) + 40, 365, 0x000000, FontHandle4, "%c", number[i]);
 	}
-	DrawStringToHandle(45 * 11 + 40, 375, "END", 0x000000, FontHandle4);
+	DrawStringToHandle(45 * 11 + 40, 365, "END", 0x000000, FontHandle4);
 
 	//カーソルが移動するとSEを流す
 	if ((g_OldKey.ThumbLY >= -hold && g_NowKey.ThumbLY < -hold) || (g_OldKey.ThumbLY <= hold && g_NowKey.ThumbLY > hold) || (g_OldKey.ThumbLX <= hold && g_NowKey.ThumbLX > hold) || (g_OldKey.ThumbLX >= -hold && g_NowKey.ThumbLX < -hold)) {
@@ -673,6 +681,7 @@ int LoadImages() {
 	if ((g_BImage[0] = LoadGraph("images/BbuttonTitle.png")) == -1)return -1;
 	if ((g_BImage[1] = LoadGraph("images/BbuttonRank.png")) == -1)return -1;
 	if ((g_BImage[2] = LoadGraph("images/Rankingbutton.png")) == -1)return -1;
+	if ((g_BImage[3] = LoadGraph("images/Helpbutton.png")) == -1)return -1;
 
 	//エンディング
 	if ((g_EndImage = LoadGraph("images/end.png")) == -1)return -1;

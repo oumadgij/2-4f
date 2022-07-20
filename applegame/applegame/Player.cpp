@@ -166,6 +166,6 @@ void Player::setRestD(int time) {
 
 void Player::DrawScore(int x, int y) {
 
-	DrawFormatString(x, y - 60 + (drawtime / 2), 0xffffff, "%d", g_Score);
+	DrawFormatStringToHandle(x, y - 60 + (drawtime / 2), 0x0000ff, FontHandle3, "%d", g_Score);
 
 }
