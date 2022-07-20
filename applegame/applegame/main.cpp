@@ -109,7 +109,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	if (ReadRanking() == -1)return -1;
 
 	FontHandle1 = CreateFontToHandle("HGS創英角ﾎﾟｯﾌﾟ体", 55, 3, DX_FONTTYPE_NORMAL);
-	FontHandle2 = CreateFontToHandle("HGS創英角ﾎﾟｯﾌﾟ体", 27, 3, DX_FONTTYPE_NORMAL);
+	FontHandle2 = CreateFontToHandle("HGS創英角ﾎﾟｯﾌﾟ体", 32, 3, DX_FONTTYPE_NORMAL);
 	FontHandle3 = CreateFontToHandle("HGS創英角ﾎﾟｯﾌﾟ体", 20, 3, DX_FONTTYPE_NORMAL);
 	FontHandle4 = CreateFontToHandle("HGS創英角ﾎﾟｯﾌﾟ体", 36, 3, DX_FONTTYPE_NORMAL);
 
@@ -385,7 +385,7 @@ void BackScrool() {
 
 	//スコアの描画
 	DrawFormatStringToHandle(533, 170, 0xfdeca6, FontHandle3, "てんすう");
-	DrawFormatStringToHandle(518, 200, 0xFFFFFF, FontHandle2, "%06d", g_Score);
+	DrawFormatStringToHandle(508, 200, 0xFFFFFF, FontHandle2, "%06d", g_Score);
 
 	//獲得したりんごの個数を描画
 	DrawFormatStringToHandle(520, 275, 0xfdeca6, FontHandle3, "とったかず");
@@ -684,16 +684,21 @@ int LoadImages() {
 void CheckPauseKey(void) {
 	if (!(g_OldKey.Buttons[XINPUT_BUTTON_START]) && g_NowKey.Buttons[XINPUT_BUTTON_START])		//指定キーでflgを1
 	{
-		StopSoundMem(g_MainBGM);  //メインBGMを止める
-		PlaySoundMem(g_PauseSE, DX_PLAYTYPE_BACK, TRUE);  //ポーズSEを再生
 		int flg = 1;
+
+		StopSoundMem(g_MainBGM);						 //メインBGMを止める
+		PlaySoundMem(g_PauseSE, DX_PLAYTYPE_BACK, TRUE);  //ポーズSEを再生
+
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA,70);			//描画の透明度を半透明に(0～255)
+		DrawBox(0, 0, 500, 480, GetColor(0, 0, 0), 1);		//ゲーム領域に透明な黒のボックスを描画
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);			//描画の透明度を戻す
+
+		DrawGraph(0, 0, g_PauseImage, TRUE);
 
 		while (ProcessMessage() == 0 && flg)
 		{
 			g_OldKey = g_NowKey;
 			GetJoypadXInputState(DX_INPUT_KEY_PAD1, &g_NowKey);
-
-			DrawGraph(0, 0, g_PauseImage, TRUE);
 
 			if (!(g_OldKey.Buttons[XINPUT_BUTTON_START]) && g_NowKey.Buttons[XINPUT_BUTTON_START]) {
 				flg = 0;		//指定キーでFlgを0
